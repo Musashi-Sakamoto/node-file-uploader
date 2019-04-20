@@ -7,6 +7,8 @@ aws.config.update({
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
     accessKeyId: process.env.ACCESS_KEY_ID,
     region: 'ap-northeast-1',
+    endpoint: process.env.STORAGE_ENDPOINT,
+    s3ForcePathStyle: true,
 });
 
 const s3 = new aws.S3();
@@ -14,7 +16,7 @@ const s3 = new aws.S3();
 const upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: 'node-file-uploader',
+        bucket: 'images',
         acl: 'public-read',
         metadata: function(req, file, cb) {
             cb(null, {fieldName: file.fieldname});

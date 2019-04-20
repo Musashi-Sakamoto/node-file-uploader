@@ -1,0 +1,5 @@
+CREATE DATABASE IF NOT EXISTS MusashiProject;
+
+GRANT ALL PRIVILEGES ON MusashiProject.*
+TO 'root'@'%' IDENTIFIED BY 'password'
+WITH GRANT OPTION;

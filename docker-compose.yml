@@ -1,0 +1,48 @@
+version: "2.1"
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    entrypoint:
+      - /usr/local/bin/docker-entrypoint.sh
+    volumes:
+      - ./backend:/backend
+    ports:
+      - "3000:3000"
+    working_dir: /backend
+
+  mysql:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    container_name: msql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ./mysql/mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: "exit 0"
+  
+  minio:
+    container_name: minio
+    image: minio/minio
+    ports:
+      - "9000:9000"
+    command: server /data
+    volumes:
+      - data:/data
+    environment:
+      MINIO_ACCESS_KEY: minioaccesskey
+      MINIO_SECRET_KEY: miniosecretkey
+      MINIO_REGION: ap-northeast-1
+
+volumes:
+  data:
