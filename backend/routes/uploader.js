@@ -23,8 +23,8 @@ const upload = multer({
         },
         key: function(req, file, cb) {
             cb(null, `${Date.now().toString()}-${file.originalname}`)
-        }
-    })
+        },
+    }),
 })
 
 module.exports = upload;
