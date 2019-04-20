@@ -14,4 +14,9 @@ app.use(cookieParser())
 
 app.use('/api/v1/image', images);
 
+app.use(function (err, req, res, next) {
+    console.error(err.stack)
+    res.status(err.status).send(err.stack);
+})
+
 module.exports = app;

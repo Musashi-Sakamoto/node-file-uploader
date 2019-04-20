@@ -1,20 +1,19 @@
 const express = require('express');
-const router = express.Router();
+const router = require('express-promise-router')();
 const upload = require('./uploader');
+const util = require('util');
 
-const singleUpload = upload.single('image');
+const singleUpload = util.promisify(upload.single('image'));
 
-router.post('/image-upload', function(req, res) {
-    singleUpload(req, res, function(err, some) {
-        if (err) {
-            return res.status(422).send({errors: [{
-                title: 'Image Upload Error',
-                detail: err.message 
-            }]});
-        }
-        return res.json({
-            'imageUrl': req.file.location
-        })
+router.post('/image-upload', async (req, res, next) => {
+    let result;
+    try {
+        result = await singleUpload(req, res);
+    } catch (error) {
+        next(error);
+    }
+    return res.json({
+        imageUrl: req.file.location,
     })
 })
 
