@@ -1,20 +1,27 @@
 const uuidV4 = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const createError = require('http-errors');
 const User = require('../models').user;
 
 const login = async (req, res, next) => {
   passport.authenticate('local', { session: false }, async (err, user, info) => {
     if (err || !user) {
-      return next(err);
+      console.log('====================================');
+      console.log(user);
+      console.log('====================================');
+      return next(new createError.BadRequest(info.message));
     }
-
     req.login(user, {
       session: false
     }, async (err2) => {
-      if (err) {
+      if (err2) {
         return next(err2);
       }
+      const token = jwt.sign(user, 'secret', {
+        expiresIn: '15h',
+        jwtid: uuidV4()
+      });
 
       let loginUser;
       try {
@@ -30,10 +37,6 @@ const login = async (req, res, next) => {
         return next(error);
       }
       if (loginUser) delete loginUser.password;
-      const token = jwt.sign(user, 'secret', {
-        expiresIn: '15h',
-        jwtid: uuidV4()
-      });
 
       return res.status(200).json({
         user: loginUser,

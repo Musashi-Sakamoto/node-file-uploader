@@ -32,7 +32,7 @@ const create = async (req, res, next) => {
     }
   }
   catch (error) {
-    error.status = 400;
+    error.status = 500;
     error.message = 'DB Error';
     return next(error);
   }
@@ -42,13 +42,13 @@ const create = async (req, res, next) => {
 
   let user;
   try {
-    user = User.create({
+    user = await User.create({
       name,
       password: hashedPassword
     });
   }
   catch (error) {
-    error.status = 400;
+    error.status = 500;
     error.message = 'DB Error';
     return next(error);
   }

@@ -8,9 +8,5 @@ module.exports = (sequelize, DataTypes) => {
   user.associate = function (models) {
     // associations can be defined here
   };
-  user.validPassword = async function (password) {
-    const isValid = await bcrypt.compare(password, this.password);
-    return isValid;
-  };
   return user;
 };
