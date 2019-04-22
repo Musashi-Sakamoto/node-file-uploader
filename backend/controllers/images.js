@@ -1,4 +1,6 @@
 const util = require('util');
+const createError = require('http-errors');
+
 const upload = require('../utils/uploader');
 
 const singleUpload = util.promisify(upload.single('image'));
@@ -8,14 +10,11 @@ const imageUpload = async (req, res, next) => {
     await singleUpload(req, res);
   }
   catch (error) {
-    next(error);
+    next(new createError.UnprocessableEntity('File is not accepted'));
     return;
   }
   if (!req.file) {
-    const error = new Error();
-    error.status = 400;
-    error.message = 'File not uploaded';
-    next(error);
+    next(new createError.BadRequest('File not uploaded.'));
     return;
   }
   res.json({

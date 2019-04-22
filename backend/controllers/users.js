@@ -1,4 +1,5 @@
 const router = require('express-promise-router')();
+const createError = require('http-errors');
 const User = require('../models').user;
 const { randomString, hashString } = require('../utils/stringUtil');
 /* GET users listing. */
@@ -12,10 +13,7 @@ const create = async (req, res, next) => {
   } = req.body;
 
   if (name.trim().length === 0) {
-    const error = new Error();
-    error.status = 400;
-    error.message = 'name not included';
-    return next(error);
+    return next(new createError.BadRequest('Name not included.'));
   }
 
   try {
@@ -25,16 +23,11 @@ const create = async (req, res, next) => {
       }
     });
     if (user !== null) {
-      const error = new Error();
-      error.status = 400;
-      error.message = 'User already exists.';
-      return next(error);
+      return next(new createError.BadRequest('User already exists.'));
     }
   }
   catch (error) {
-    error.status = 500;
-    error.message = 'DB Error';
-    return next(error);
+    return next(new createError.InternalServerError('DB Error'));
   }
 
   const password = randomString(8);
@@ -48,9 +41,7 @@ const create = async (req, res, next) => {
     });
   }
   catch (error) {
-    error.status = 500;
-    error.message = 'DB Error';
-    return next(error);
+    return next(new createError.InternalServerError('DB Error'));
   }
   return res.status(201).json({
     user,
