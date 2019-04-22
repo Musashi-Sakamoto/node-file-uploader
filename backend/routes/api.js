@@ -1,3 +1,4 @@
+const passport = require('passport');
 const router = require('express-promise-router')();
 
 const authController = require('../controllers/auth');
@@ -6,8 +7,8 @@ const userController = require('../controllers/users');
 
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
-router.post('/images', imageController.imageUpload);
+router.post('/images', passport.authenticate('jwt', { session: false }), imageController.imageUpload);
 
-router.post('/users', userController.create);
+router.post('/users', passport.authenticate('jwt', { session: false }), userController.create);
 
 module.exports = router;

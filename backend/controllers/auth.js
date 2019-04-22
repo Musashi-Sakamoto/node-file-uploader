@@ -23,17 +23,15 @@ const login = async (req, res, next) => {
       let loginUser;
       try {
         loginUser = await User.findOne({
+          attributes: ['id', 'name'],
           where: {
             name: user.name
           }
         });
       }
       catch (error) {
-        error.status = 400;
-        error.message = 'DB Error';
-        return next(error);
+        return next(new createError.InternalServerError('DB Error'));
       }
-      if (loginUser) delete loginUser.password;
 
       return res.status(200).json({
         user: loginUser,
