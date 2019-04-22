@@ -3,7 +3,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 
-var images = require('./routes/images');
+const api = require('./routes/api');
 
 var app = express();
 
@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(passport.initialize());
 require('./passport');
 
-app.use('/api/v1/image', images);
+app.use('/api/v1', api);
 
 app.use((err, req, res, next) => {
   res.status(err.status).json({

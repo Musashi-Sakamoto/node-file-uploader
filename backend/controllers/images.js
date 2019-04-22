@@ -1,10 +1,9 @@
-const router = require('express-promise-router')();
 const util = require('util');
-const upload = require('./uploader');
+const upload = require('../utils/uploader');
 
 const singleUpload = util.promisify(upload.single('image'));
 
-router.post('/image-upload', async (req, res, next) => {
+const imageUpload = async (req, res, next) => {
   try {
     await singleUpload(req, res);
   }
@@ -22,6 +21,8 @@ router.post('/image-upload', async (req, res, next) => {
   res.json({
     imageUrl: req.file.location
   });
-});
+};
 
-module.exports = router;
+module.exports = {
+  imageUpload
+};
