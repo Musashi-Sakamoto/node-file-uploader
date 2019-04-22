@@ -1,8 +1,11 @@
 const uuidV4 = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const Redis = require('ioredis');
 const createError = require('http-errors');
 const User = require('../models').user;
+
+const redis = new Redis(6379, process.env.REDIS_ENDPOINT);
 
 const login = async (req, res, next) => {
   passport.authenticate('local', { session: false }, async (err, user, info) => {
@@ -15,9 +18,10 @@ const login = async (req, res, next) => {
       if (err2) {
         return next(err2);
       }
+      const jwtid = uuidV4();
       const token = jwt.sign(user, 'secret', {
         expiresIn: '15h',
-        jwtid: uuidV4()
+        jwtid
       });
 
       let loginUser;
@@ -28,6 +32,7 @@ const login = async (req, res, next) => {
             name: user.name
           }
         });
+        await redis.set(loginUser.id, jwtid, 'ex', 60 * 60 * 15);
       }
       catch (error) {
         return next(new createError.InternalServerError('DB Error'));
@@ -43,6 +48,8 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
+  console.log(req);
+
   req.logout();
   res.status(200).json({
     message: 'Accepted'
