@@ -43,3 +43,15 @@ const login = async (req, res, next) => {
     });
   })(req, res);
 };
+
+const logout = async (req, res, next) => {
+  req.logout();
+  res.status(200).json({
+    message: 'Accepted'
+  });
+};
+
+module.exports = {
+  login,
+  logout
+};
