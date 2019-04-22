@@ -6,3 +6,5 @@ const userController = require('../controllers/users');
 router.post('/images', imageController.imageUpload);
 
 router.post('/users', userController.create);
+
+module.exports = router;

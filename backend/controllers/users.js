@@ -1,5 +1,5 @@
 const router = require('express-promise-router')();
-const User = require('../models/user');
+const User = require('../models').user;
 const { randomString, hashString } = require('../utils/stringUtil');
 /* GET users listing. */
 router.get('/', (req, res, next) => {

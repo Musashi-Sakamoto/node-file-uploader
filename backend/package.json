@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "migrate": "npx sequelize db:migrate"
   },
   "dependencies": {
     "aws-sdk": "^2.441.0",
