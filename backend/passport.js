@@ -24,5 +24,5 @@ passport.use(new LocalStrategy({
   if (!isValid) {
     return done(null, false, { message: 'Incorrect password.' });
   }
-  return done(null, user.toJSON());
+  return done(null, user.toJSON(), { message: 'Login succeeded!' });
 }));
