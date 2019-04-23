@@ -1,12 +1,16 @@
 const createError = require('http-errors');
 const User = require('../models').user;
+const Image = require('../models').image;
 const { randomString, hashString } = require('../utils/stringUtil');
 /* GET users listing. */
 const list = async (req, res, next) => {
   let users;
   try {
     users = await User.findAll({
-      attributes: ['id', 'name']
+      attributes: ['id', 'name'],
+      include: [{
+        model: Image
+      }]
     });
   }
   catch (error) {

@@ -1,4 +1,3 @@
-const uuidV4 = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const Redis = require('ioredis');
