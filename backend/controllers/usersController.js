@@ -1,4 +1,3 @@
-const router = require('express-promise-router')();
 const createError = require('http-errors');
 const User = require('../models').user;
 const { randomString, hashString } = require('../utils/stringUtil');
