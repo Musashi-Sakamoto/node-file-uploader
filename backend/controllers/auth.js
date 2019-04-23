@@ -50,7 +50,7 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  console.log(req);
+  console.log(req.user);
 
   req.logout();
   res.status(200).json({

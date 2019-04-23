@@ -35,8 +35,10 @@ passport.use(new JwtStrategy({
   let user;
   try {
     user = await User.findOne({
-      id: jwtPayload.id,
-      name: jwtPayload.name
+      where: {
+        id: jwtPayload.id,
+        name: jwtPayload.name
+      }
     });
   }
   catch (error) {
