@@ -1,9 +1,14 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
+const Redis = require('ioredis');
 const createError = require('http-errors');
 const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
+
+const redis = new Redis({
+  host: process.env.REDIS_ENDPOINT
+});
 const User = require('./models').user;
 
 passport.use(new LocalStrategy({
@@ -44,8 +49,12 @@ passport.use(new JwtStrategy({
   catch (error) {
     return done(new createError.InternalServerError('DB Error'));
   }
-  if (user) {
-    return done(null, user);
+  if (!user) {
+    return done(null, false, { message: 'User not found' });
   }
-  return done(null, false, { message: 'User not found' });
+  const token = await redis.get(user.id);
+  if (!token) {
+    return done(null, false, { message: 'You are logged out' });
+  }
+  return done(null, user);
 }));

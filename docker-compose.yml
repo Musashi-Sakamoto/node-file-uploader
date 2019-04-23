@@ -6,6 +6,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
+    links:
+      - redis
     depends_on:
       mysql:
         condition: service_healthy
@@ -16,6 +18,12 @@ services:
     ports:
       - "3000:3000"
     working_dir: /backend
+  
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
 
   mysql:
     build:

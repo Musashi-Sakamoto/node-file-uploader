@@ -20,10 +20,8 @@ const login = async (req, res, next) => {
       if (err2) {
         return next(err2);
       }
-      const jwtid = uuidV4();
       const token = jwt.sign(user, 'secret', {
-        expiresIn: '15h',
-        jwtid
+        expiresIn: '15h'
       });
 
       let loginUser;
@@ -34,7 +32,7 @@ const login = async (req, res, next) => {
             name: user.name
           }
         });
-        await redis.set(loginUser.id, jwtid, 'ex', 60 * 60 * 15);
+        await redis.set(loginUser.id, token, 'ex', 60 * 60 * 15);
       }
       catch (error) {
         return next(new createError.InternalServerError('DB Error'));
@@ -50,8 +48,7 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  console.log(req.user);
-
+  await redis.del(req.user.id);
   req.logout();
   res.status(200).json({
     message: 'Accepted'
