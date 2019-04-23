@@ -5,7 +5,9 @@ const Redis = require('ioredis');
 const createError = require('http-errors');
 const User = require('../models').user;
 
-const redis = new Redis(6379, process.env.REDIS_ENDPOINT);
+const redis = new Redis({
+  host: process.env.REDIS_ENDPOINT
+});
 
 const login = async (req, res, next) => {
   passport.authenticate('local', { session: false }, async (err, user, info) => {
