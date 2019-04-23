@@ -3,9 +3,20 @@ const createError = require('http-errors');
 const User = require('../models').user;
 const { randomString, hashString } = require('../utils/stringUtil');
 /* GET users listing. */
-router.get('/', (req, res, next) => {
-  res.json({ users: [{ name: 'Timmy' }] });
-});
+const list = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.findAll({
+      attributes: ['id', 'name']
+    });
+  }
+  catch (error) {
+    return next(new createError.InternalServerError('DB Error'));
+  }
+  return res.status(200).json({
+    users
+  });
+};
 
 const create = async (req, res, next) => {
   const {
@@ -50,5 +61,6 @@ const create = async (req, res, next) => {
 };
 
 module.exports = {
-  create
+  create,
+  list
 };

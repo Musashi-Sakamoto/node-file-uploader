@@ -10,5 +10,6 @@ router.get('/logout', passport.authenticate('jwt', { session: false }), authCont
 router.post('/images', passport.authenticate('jwt', { session: false }), imageController.imageUpload);
 
 router.post('/users', userController.create);
+router.get('/users', passport.authenticate('jwt', { session: false }), userController.list);
 
 module.exports = router;
