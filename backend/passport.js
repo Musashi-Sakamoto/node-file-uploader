@@ -13,7 +13,7 @@ passport.use(new LocalStrategy({
 }, async (req, username, password, done) => {
   let user;
   try {
-    user = await User.findOne({ name: username });
+    user = await User.findOne({ where: { name: username } });
   }
   catch (error) {
     return done(new createError.InternalServerError('DB Error'));
