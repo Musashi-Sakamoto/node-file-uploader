@@ -18,12 +18,10 @@ const imageUpload = async (req, res, next) => {
     next(new createError.BadRequest('File not uploaded.'));
     return;
   }
-  const imageUrl = req.file.location;
   let image;
   try {
     image = await Image.create({
-      url: imageUrl,
-      name: req.file.originalname,
+      key: req.file.key,
       user_id: req.user.id
     });
   }
