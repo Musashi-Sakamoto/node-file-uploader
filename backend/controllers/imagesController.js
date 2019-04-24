@@ -1,10 +1,28 @@
 const util = require('util');
 const createError = require('http-errors');
+const _ = require('lodash');
 const Image = require('../models').image;
 
-const upload = require('../utils/uploader');
+const { upload } = require('../utils/s3Control');
 
 const singleUpload = util.promisify(upload.single('image'));
+
+const list = async (req, res, next) => {
+  let images;
+  try {
+    images = await Image.findAll({
+      where: {
+        user_id: req.user.id
+      }
+    });
+  }
+  catch (error) {
+    return next(new createError.InternalServerError('DB Error'));
+  }
+  res.json({
+    images
+  });
+};
 
 const imageUpload = async (req, res, next) => {
   try {
@@ -35,5 +53,6 @@ const imageUpload = async (req, res, next) => {
 };
 
 module.exports = {
-  imageUpload
+  imageUpload,
+  list
 };
