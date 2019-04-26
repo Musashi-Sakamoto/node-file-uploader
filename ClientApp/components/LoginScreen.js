@@ -1,6 +1,8 @@
 import React from 'react';
 import Axios from 'axios';
-import { Button, TextInput, View } from 'react-native';
+import {
+ Button, TextInput, View, AsyncStorage 
+} from 'react-native';
 
 
 class LoginScreen extends React.Component {
@@ -21,19 +23,18 @@ class LoginScreen extends React.Component {
           username: this.state.name,
           password: this.state.password,
         });
+        await AsyncStorage.setItem('token', result.data.token);
       } catch (error) {
         console.log('====================================');
         console.log(error);
         console.log('====================================');
       }
-      console.log('====================================');
-      console.log(result);
-      console.log('====================================');
+      const { navigate } = this.props.navigation;
+      navigate('Main', { name: 'Jane' });
     }
   }
 
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <View>
         <TextInput
@@ -48,7 +49,7 @@ class LoginScreen extends React.Component {
         />
         <Button
           title="Login"
-          onPress={() => navigate('Main', { name: 'Jane' })}
+          onPress={this.onPressClicked}
         />
       </View>
     );
