@@ -1,4 +1,3 @@
-require('dotenv').config();
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const aws = require('aws-sdk');
@@ -8,7 +7,8 @@ aws.config.update({
   accessKeyId: process.env.ACCESS_KEY_ID,
   region: 'ap-northeast-1',
   endpoint: process.env.STORAGE_ENDPOINT,
-  s3ForcePathStyle: true
+  s3ForcePathStyle: true,
+  signatureVersion: 'v4'
 });
 
 const s3 = new aws.S3();
@@ -27,4 +27,16 @@ const upload = multer({
   })
 });
 
-module.exports = upload;
+const deleteS3Object = (key) => {
+  const params = {
+    Bucket: 'images',
+    Key: key
+  };
+
+  return s3.deleteObject(params).promise();
+};
+
+module.exports = {
+  deleteS3Object,
+  upload
+};
