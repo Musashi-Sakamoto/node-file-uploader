@@ -6,7 +6,11 @@ const User = require('../models').user;
 
 const login = async (req, res, next) => {
   passport.authenticate('local', { session: false }, async (err, user, info) => {
-    if (err || !user) {
+    if (err) {
+      return next(err);
+    }
+
+    if (!user) {
       return next(new createError.BadRequest(info.message));
     }
     req.login(user, {

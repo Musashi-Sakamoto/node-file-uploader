@@ -21,7 +21,7 @@ services:
     build:
       context: ./mysql
       dockerfile: Dockerfile
-    container_name: msql
+    container_name: mysql
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     volumes:
