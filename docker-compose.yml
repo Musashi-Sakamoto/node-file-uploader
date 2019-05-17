@@ -33,7 +33,6 @@ services:
       - "35729:35729"
     volumes:
       - ./frontend:/frontend
-      - /frontend/node_modules
     environment:
       - API_HOST=backend
       - CHOKIDAR_USEPOLLING=true

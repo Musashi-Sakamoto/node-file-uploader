@@ -23,7 +23,8 @@ const list = async (req, res, next) => {
 
 const create = async (req, res, next) => {
   const {
-    name
+    name,
+    password
   } = req.body;
 
   if (name.trim().length === 0) {
@@ -44,7 +45,6 @@ const create = async (req, res, next) => {
     return next(new createError.InternalServerError('DB Error'));
   }
 
-  const password = randomString(8);
   const hashedPassword = await hashString(password);
 
   let user;
