@@ -1,7 +1,6 @@
 const createError = require('http-errors');
 const _ = require('lodash');
 const Post = require('../models').post;
-const User = require('../models').user;
 
 const list = async (req, res, next) => {
   let posts;
@@ -15,7 +14,7 @@ const list = async (req, res, next) => {
   catch (error) {
     return next(new createError.InternalServerError('DB Error'));
   }
-  res.json({
+  return res.status(200).json({
     posts
   });
 };
@@ -48,7 +47,9 @@ const create = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   const {
-    id,
+    id
+  } = req.params;
+  const {
     title,
     description
   } = req.body;
@@ -56,22 +57,79 @@ const update = async (req, res, next) => {
     title,
     description
   };
-
+  console.log('====================================');
+  console.log(`${description}`);
+  console.log('====================================');
+  let existingPost;
   try {
-    await Post.update(postData, {
+    existingPost = await Post.findOne({
       where: {
-        id,
-        user_id: req.user.id
+        id
       }
     });
   }
   catch (error) {
     return next(new createError.InternalServerError('DB Error'));
   }
+  if (!existingPost) {
+    return next(new createError.BadRequest('Post not exits'));
+  }
+
+  console.log('====================================');
+  console.log(`${id}, ${req.user.id}`);
+  console.log('====================================');
+
+  try {
+    await existingPost.update(postData);
+  }
+  catch (error) {
+    return next(new createError.InternalServerError('DB Error'));
+  }
+
+  return res.status(204).json({
+    message: 'Accepted'
+  });
+};
+
+const destroy = async (req, res, next) => {
+  const {
+    id
+  } = req.params;
+
+  let existingPost;
+  try {
+    existingPost = await Post.findOne({
+      where: {
+        id
+      }
+    });
+  }
+  catch (error) {
+    return next(new createError.InternalServerError('DB Error'));
+  }
+  if (!existingPost) {
+    return next(new createError.BadRequest('Post not exits'));
+  }
+
+  try {
+    await Post.destroy({
+      where: {
+        id
+      }
+    });
+  }
+  catch (error) {
+    return next(new createError.InternalServerError('DB Error'));
+  }
+
+  return res.status(204).json({
+    message: 'Accepted'
+  });
 };
 
 module.exports = {
   create,
   list,
-  update
+  update,
+  destroy
 };
