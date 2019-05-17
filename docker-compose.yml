@@ -25,6 +25,23 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+  
+  frontend:
+    build: ./frontend
+    ports:
+      - "8000:8000"
+      - "35729:35729"
+    volumes:
+      - ./frontend:/frontend
+      - /frontend/node_modules
+    environment:
+      - API_HOST=backend
+      - CHOKIDAR_USEPOLLING=true
+    working_dir: /frontend
+    healthcheck:
+      test: "exit 0"
+    depends_on:
+      - backend
 
   mysql:
     build:
