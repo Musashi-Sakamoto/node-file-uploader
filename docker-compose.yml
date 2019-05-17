@@ -30,6 +30,7 @@ services:
     build:
       context: ./mysql
       dockerfile: Dockerfile
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     container_name: mysql
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
