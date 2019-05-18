@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import Router from 'next/router';
-import cookie from 'js-cookie';
-import axios from 'axios';
 import Link from 'next/link';
+import axios from 'axios';
 import Form from '../components/Form';
 
-const LoginForm = () => {
+const SignupForm = () => {
   const [err, setError] = useState('');
 
-  const onLoginClicked = async (username, password) => {
+  const onSignupClicked = async (name, password) => {
     let res;
     try {
-      res = await axios.post('http://localhost:3000/api/v1/login', {
-        username,
+      res = await axios.post('http://localhost:3000/api/v1/users', {
+        name,
         password
       });
     }
@@ -22,19 +21,18 @@ const LoginForm = () => {
     }
     const { data } = res;
 
-    if (data.token) {
+    if (data.user) {
       setError('');
-      cookie.set('token', data.token);
-      Router.push('/');
+      Router.push('/login');
     }
   };
 
   return (
     <React.Fragment>
-      <Link href="/signup">
-        Signup
+    <Link href="/login">
+        Login
     </Link>
-      <Form onSubmit={onLoginClicked} isLogin />
+      <Form onSubmit={onSignupClicked} isLogin={false} />
       {err && (
         <p>{err}</p>
       )}
@@ -42,4 +40,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignupForm;
