@@ -2,14 +2,30 @@ import React, { useState } from 'react';
 import Router from 'next/router';
 import cookie from 'js-cookie';
 import axios from 'axios';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
-const LoginForm = () => {
+const styles = () => ({
+  container: {
+    display: 'flex',
+    paddingTop: 100
+  },
+  formContainer: {
+    margin: 'auto'
+  },
+  TextField: {
+    display: 'block'
+  }
+});
+
+const LoginForm = (props) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [err, setError] = useState('');
 
   const onLoginClicked = async () => {
-    if (username.trim().length === 0 && password.trim().length === 0) {
+    if (username.trim().length === 0 || password.trim().length === 0) {
       setError('Username or Password should not be blank');
       return;
     }
@@ -33,28 +49,36 @@ const LoginForm = () => {
     }
   };
 
+  const { classes } = props;
+
   return (
-      <div>
-           <input
+    <div className={classes.container}>
+      <div className={classes.formContainer}>
+           <TextField
+           className={classes.TextField}
+           label="username"
             value={username}
             onChange={e => setUserName(e.target.value)}
             placeholder="User Name"
             type="text"
             name="username"
             required />
-           <input
+           <TextField
+            className={classes.TextField}
+           label="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
             placeholder="Password"
             type="password"
             name="password"
             required />
-            <button onClick={onLoginClicked}>Submit</button>
+            <Button onClick={onLoginClicked}>Submit</Button>
             {err && (
               <p>{err}</p>
             )}
       </div>
+    </div>
   );
 };
 
-export default LoginForm;
+export default withStyles(styles)(LoginForm);
