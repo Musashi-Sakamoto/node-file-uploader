@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Router from 'next/router';
+import cookie from 'js-cookie';
 import axios from 'axios';
 
 const LoginForm = () => {
@@ -27,7 +28,7 @@ const LoginForm = () => {
 
     if (data.token) {
       setError('');
-      localStorage.setItem('token', data.token);
+      cookie.set('token', data.token);
       Router.push('/');
     }
   };
