@@ -2,9 +2,27 @@ import React, { useState, useEffect } from 'react';
 import cookies from 'next-cookies';
 import Router from 'next/router';
 import axios from 'axios';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = () => ({
+  root: {
+    width: 360,
+    margin: 'auto'
+  },
+  primary: {
+    textAlign: 'center'
+  },
+  secondary: {
+    textAlign: 'center'
+  }
+});
 
 const Index = (props) => {
-  const { token } = props;
+  const { token, classes } = props;
   const [err, setError] = useState('');
   const [posts, setPosts] = useState([]);
 
@@ -34,7 +52,20 @@ const Index = (props) => {
 
   return (
     <div>
-      <p>{posts.length}</p>
+      <List className={classes.root}>
+          {posts.map((post, i) => (
+              <React.Fragment key={i}>
+                <ListItem>
+                    <ListItemText classes={{
+                      primary: classes.primary,
+                      secondary: classes.secondary
+                    }} primary={post.title} secondary={post.description}/>
+                </ListItem>
+                <Divider />
+              </React.Fragment>
+
+          ))}
+      </List>
       {err && (
         <p>{err}</p>
       )}
@@ -57,4 +88,4 @@ Index.getInitialProps = (ctx) => {
   return { token };
 };
 
-export default Index;
+export default withStyles(styles)(Index);
