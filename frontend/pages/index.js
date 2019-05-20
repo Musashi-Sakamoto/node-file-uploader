@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import cookies from 'next-cookies';
 import Router from 'next/router';
 import axios from 'axios';
@@ -7,6 +7,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
+
+import { Store } from '../utils/Store';
 
 const styles = () => ({
   root: {
@@ -22,9 +24,12 @@ const styles = () => ({
 });
 
 const Index = (props) => {
+  console.log(useContext(Store));
+
+  const { state, dispatch } = useContext(Store);
+
   const { token, classes } = props;
   const [err, setError] = useState('');
-  const [posts, setPosts] = useState([]);
 
   const fetchData = async () => {
     let res;
@@ -43,7 +48,10 @@ const Index = (props) => {
       setError(error.response.data.error.message);
     }
 
-    setPosts(res.data.posts);
+    return dispatch({
+      type: 'FETCH_DATA',
+      payload: res.data.posts
+    });
   };
 
   useEffect(() => {
@@ -53,7 +61,7 @@ const Index = (props) => {
   return (
     <div>
       <List className={classes.root}>
-          {posts.map((post, i) => (
+          {state.posts.map((post, i) => (
               <React.Fragment key={i}>
                 <ListItem>
                     <ListItemText classes={{

@@ -5,6 +5,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import JssProvider from 'react-jss/lib/JssProvider';
 import getPageContext from '../src/getPageContext';
+import { StoreProvider } from '../utils/Store';
 
 class MyApp extends App {
   constructor() {
@@ -24,6 +25,7 @@ class MyApp extends App {
     const { Component, pageProps } = this.props;
     return (
       <Container>
+        <StoreProvider>
         <Head>
           <title>My page</title>
         </Head>
@@ -42,9 +44,10 @@ class MyApp extends App {
             <CssBaseline />
             {/* Pass pageContext to the _document though the renderPage enhancer
                 to render collected styles on server-side. */}
-            <Component pageContext={this.pageContext} {...pageProps} />
+                <Component pageContext={this.pageContext} {...pageProps} />
           </MuiThemeProvider>
         </JssProvider>
+        </StoreProvider>
       </Container>
     );
   }
