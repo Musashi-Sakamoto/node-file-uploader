@@ -4,36 +4,37 @@ import Router from 'next/router';
 import axios from 'axios';
 
 const Index = (props) => {
+  const { token } = props;
   const [err, setError] = useState('');
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let res;
-      try {
-        res = await axios.get('http://localhost:3000/api/v1/posts', {
-          headers: {
-            Authorization: `Bearer ${props.token}`
-          }
-        });
-      }
-      catch (error) {
-        if (error.response.status === 401) {
-          Router.push('/login');
-          return;
+  const fetchData = async () => {
+    let res;
+    try {
+      res = await axios.get('http://localhost:3000/api/v1/posts', {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-        setError(error.response.data.error.message);
+      });
+    }
+    catch (error) {
+      if (error.response.status === 401) {
+        Router.push('/login');
         return;
       }
-      const { data } = res;
-      console.log(data.posts);
-    };
+      setError(error.response.data.error.message);
+    }
+
+    setPosts(res.data.posts);
+  };
+
+  useEffect(() => {
     fetchData();
-  }, [posts, props.token]);
+  }, []);
 
   return (
     <div>
-      <p>Hello Next.js</p>
+      <p>{posts.length}</p>
       {err && (
         <p>{err}</p>
       )}
