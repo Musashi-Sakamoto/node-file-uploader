@@ -9,6 +9,7 @@ import Divider from '@material-ui/core/Divider';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core/styles';
+import ReactPaginate from 'react-paginate';
 
 import { Store } from '../utils/Store';
 import Navbar from '../components/Navbar';
@@ -46,6 +47,8 @@ const Index = (props) => {
   const { token, classes } = props;
   const [err, setError] = useState('');
   const [isOpen, setOpen] = useState(false);
+  const [pageCount, setPageCount] = useState(0);
+  const [offset, setOffset] = useState(0);
 
   const fetchData = async () => {
     let res;
@@ -55,10 +58,11 @@ const Index = (props) => {
           Authorization: `Bearer ${token}`
         },
         params: {
-          limit: 50,
-          offset: 0
+          limit: 20,
+          offset
         }
       });
+      setPageCount(Math.ceil(res.data.posts.count / 20));
     }
     catch (error) {
       if (error.response.status === 401) {
@@ -70,7 +74,7 @@ const Index = (props) => {
 
     return dispatch({
       type: 'FETCH_DATA',
-      payload: res.data.posts
+      payload: res.data.posts.rows
     });
   };
 
@@ -94,9 +98,15 @@ const Index = (props) => {
     fetchData();
   };
 
+  const handlePageClick = (data) => {
+    const { selected } = data;
+    const num = Math.ceil(selected * 20);
+    setOffset(num);
+  };
+
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [offset]);
 
   return (
     <div className={classes.root}>
@@ -121,6 +131,20 @@ const Index = (props) => {
       <Fab className={classes.fab} onClick={() => setOpen(true)}>
           <AddIcon />
       </Fab>
+      <ReactPaginate
+          previousLabel={'previous'}
+          nextLabel={'next'}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
+          pageCount={pageCount}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={'pagination'}
+          subContainerClassName={'pages pagination'}
+          activeClassName={'active'}
+        />
+
       {err && (
         <p>{err}</p>
       )}

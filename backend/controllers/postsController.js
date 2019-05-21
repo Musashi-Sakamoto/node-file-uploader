@@ -9,7 +9,7 @@ const list = async (req, res, next) => {
   console.log('====================================');
   let posts;
   try {
-    posts = await Post.findAll({
+    posts = await Post.findAndCountAll({
       limit: Number(limit),
       offset: Number(offset),
       where: {
