@@ -36,6 +36,47 @@ const styles = () => ({
     left: 'auto',
     right: 400,
     bottom: 50
+  },
+  pagerContainer: {
+    display: 'block',
+    width: 240,
+    margin: 'auto',
+    paddingLeft: 15,
+    paddingRight: 15
+  },
+  pager: {
+    display: 'inline-block',
+    textAlign: 'center',
+    width: 30
+  },
+  pagerLink: {
+    outline: 'none'
+  },
+  previous: {
+    display: 'inline-block',
+    textAlign: 'center',
+    width: 30
+  },
+  previousLink: {
+    outline: 'none'
+  },
+  nextLink: {
+    outline: 'none'
+  },
+  next: {
+    textAlign: 'center',
+    width: 30,
+    display: 'inline-block'
+  },
+  disable: {
+    color: 'gray'
+  },
+  active: {
+    color: 'white',
+    backgroundColor: 'black'
+  },
+  activeLink: {
+    outline: 'none'
   }
 });
 
@@ -132,17 +173,24 @@ const Index = (props) => {
           <AddIcon />
       </Fab>
       <ReactPaginate
-          previousLabel={'previous'}
-          nextLabel={'next'}
+          previousLabel={'<'}
+          nextLabel={'>'}
           breakLabel={'...'}
           breakClassName={'break-me'}
           pageCount={pageCount}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
+          containerClassName={classes.pagerContainer}
+          pageClassName={classes.pager}
+          pageLinkClassName={classes.pagerLink}
+          previousClassName={classes.previous}
+          previousLinkClassName={classes.previousLink}
+          nextLinkClassName={classes.nextLink}
+          nextClassName={classes.next}
+          activeClassName={classes.active}
+          activeLinkClassName={classes.activeLink}
+          disabledClassName={classes.disable}
         />
 
       {err && (
