@@ -6,6 +6,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core/styles';
 
 import { Store } from '../utils/Store';
@@ -13,6 +15,9 @@ import Navbar from '../components/Navbar';
 
 const styles = () => ({
   root: {
+    position: 'relative'
+  },
+  list: {
     marginTop: 64,
     width: 360,
     margin: 'auto'
@@ -22,6 +27,13 @@ const styles = () => ({
   },
   secondary: {
     textAlign: 'center'
+  },
+  fab: {
+    position: 'fixed',
+    top: 'auto',
+    left: 'auto',
+    right: 400,
+    bottom: 50
   }
 });
 
@@ -61,10 +73,10 @@ const Index = (props) => {
   }, []);
 
   return (
-    <React.Fragment>
+    <div className={classes.root}>
       <Navbar isLoggedIn token={token}/>
 
-      <List className={classes.root}>
+      <List className={classes.list}>
           {state.posts.map((post, i) => (
               <React.Fragment key={i}>
                 <ListItem>
@@ -75,13 +87,16 @@ const Index = (props) => {
                 </ListItem>
                 <Divider />
               </React.Fragment>
-
           ))}
       </List>
+
+      <Fab className={classes.fab}>
+          <AddIcon />
+      </Fab>
       {err && (
         <p>{err}</p>
       )}
-    </React.Fragment>
+    </div>
   );
 };
 
