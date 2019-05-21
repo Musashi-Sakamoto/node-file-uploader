@@ -8,7 +8,10 @@ const list = async (req, res, next) => {
     posts = await Post.findAll({
       where: {
         user_id: req.user.id
-      }
+      },
+      order: [
+        ['createdAt', 'DESC']
+      ]
     });
   }
   catch (error) {
