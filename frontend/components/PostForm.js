@@ -49,11 +49,25 @@ const PostForm = ({
             <DialogTitle id="form-dialog-title">Post</DialogTitle>
             <DialogContent>
             <TextField
+            value={title}
+            onChange={e => setTitle(e.target.value)}
               autoFocus
               margin="dense"
               id="title"
               label="title"
               type="text"
+              fullWidth
+            />
+            <TextField
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+              autoFocus
+              margin="dense"
+              id="description"
+              label="description"
+              type="text"
+              multiline={true}
+              rows={5}
               fullWidth
             />
             </DialogContent>
