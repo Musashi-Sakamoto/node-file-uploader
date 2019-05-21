@@ -36,6 +36,9 @@ const PostForm = ({
       setError('title or description should not be blank');
       return;
     }
+    setTitle('');
+    setDescription('');
+    setError('');
     onSubmit(title, description);
   };
 

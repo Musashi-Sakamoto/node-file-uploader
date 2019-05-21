@@ -70,6 +70,26 @@ const Index = (props) => {
     });
   };
 
+  const postData = async (title, description) => {
+    let res;
+    try {
+      res = await axios.post('http://localhost:3000/api/v1/posts', { title, description }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+    catch (error) {
+      if (error.response.status === 401) {
+        Router.push('/login');
+        return;
+      }
+      setError(error.response.data.error.message);
+    }
+    setOpen(false);
+    fetchData();
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -78,7 +98,7 @@ const Index = (props) => {
     <div className={classes.root}>
       <Navbar isLoggedIn token={token}/>
 
-      <PostForm isOpen={isOpen} onClose={() => setOpen(false)} />
+      <PostForm isOpen={isOpen} onClose={() => setOpen(false)} onSubmit={postData} />
 
       <List className={classes.list}>
           {state.posts.map((post, i) => (
