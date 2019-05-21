@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import cookie from 'js-cookie';
+import Router from 'next/router';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,14 +15,34 @@ const styles = {
   },
   grow: {
     flexGrow: 1
-  },
-  button: {
-    marginTop: 20
   }
 };
 
 const Navbar = (props) => {
-  const { classes, isLogin } = props;
+  const {
+    classes, isLogin, isLoggedIn, token
+  } = props;
+
+  const [err, setError] = useState('');
+
+  const onLogoutClicked = async () => {
+    try {
+      await axios.get('http://localhost:3000/api/v1/logout', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+    catch (error) {
+      setError(error.response.data.error.message);
+      return;
+    }
+
+    setError('');
+    cookie.remove('token');
+    Router.push('/login');
+  };
+
   return (
     <div className={classes.root}>
       <AppBar>
@@ -27,11 +50,15 @@ const Navbar = (props) => {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             Diary
           </Typography>
+            {!isLoggedIn ? (
             <Link href={isLogin ? '/signup' : '/login'}>
-                <Button classes={{ root: classes.button }} color="inherit">
+                <Button color="inherit">
                     {isLogin ? 'Signup' : 'Login'}
                 </Button>
-            </Link>
+            </Link>) : (
+            <Button color="inherit" onClick={onLogoutClicked}>
+                Logout
+            </Button>)}
         </Toolbar>
       </AppBar>
     </div>

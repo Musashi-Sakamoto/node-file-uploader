@@ -17,6 +17,9 @@ const styles = () => ({
   },
   TextField: {
     display: 'block'
+  },
+  button: {
+    marginTop: 20
   }
 });
 
@@ -54,7 +57,7 @@ const Form = ({ classes, onSubmit, isLogin }) => {
             type="password"
             name="password"
             required />
-            <Button onClick={onSubmitClicked}>{isLogin ? 'Login' : 'Signup'}</Button>
+            <Button classes={{ root: classes.button }} onClick={onSubmitClicked}>{isLogin ? 'Login' : 'Signup'}</Button>
       </div>
     </div>
   );

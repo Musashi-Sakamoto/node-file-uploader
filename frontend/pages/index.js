@@ -13,6 +13,7 @@ import Navbar from '../components/Navbar';
 
 const styles = () => ({
   root: {
+    marginTop: 64,
     width: 360,
     margin: 'auto'
   },
@@ -61,7 +62,7 @@ const Index = (props) => {
 
   return (
     <React.Fragment>
-                      <Navbar />
+      <Navbar isLoggedIn token={token}/>
 
       <List className={classes.root}>
           {state.posts.map((post, i) => (
