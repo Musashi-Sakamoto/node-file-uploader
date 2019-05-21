@@ -9,6 +9,7 @@ import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
 
 import { Store } from '../utils/Store';
+import Navbar from '../components/Navbar';
 
 const styles = () => ({
   root: {
@@ -59,7 +60,9 @@ const Index = (props) => {
   }, []);
 
   return (
-    <div>
+    <React.Fragment>
+                      <Navbar />
+
       <List className={classes.root}>
           {state.posts.map((post, i) => (
               <React.Fragment key={i}>
@@ -77,7 +80,7 @@ const Index = (props) => {
       {err && (
         <p>{err}</p>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

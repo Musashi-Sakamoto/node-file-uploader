@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 const styles = () => ({
   container: {
     display: 'flex',
+    marginTop: 64,
     paddingTop: 100
   },
   formContainer: {

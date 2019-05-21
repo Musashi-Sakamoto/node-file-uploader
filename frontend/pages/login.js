@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Router from 'next/router';
 import cookie from 'js-cookie';
 import axios from 'axios';
-import Link from 'next/link';
 import Form from '../components/Form';
+import Navbar from '../components/Navbar';
 
 const LoginForm = () => {
   const [err, setError] = useState('');
@@ -31,9 +31,7 @@ const LoginForm = () => {
 
   return (
     <React.Fragment>
-      <Link href="/signup">
-        Signup
-    </Link>
+      <Navbar isLogin />
       <Form onSubmit={onLoginClicked} isLogin />
       {err && (
         <p>{err}</p>
