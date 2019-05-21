@@ -12,6 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import { Store } from '../utils/Store';
 import Navbar from '../components/Navbar';
+import PostForm from '../components/PostForm';
 
 const styles = () => ({
   root: {
@@ -44,6 +45,7 @@ const Index = (props) => {
 
   const { token, classes } = props;
   const [err, setError] = useState('');
+  const [isOpen, setOpen] = useState(false);
 
   const fetchData = async () => {
     let res;
@@ -76,6 +78,8 @@ const Index = (props) => {
     <div className={classes.root}>
       <Navbar isLoggedIn token={token}/>
 
+      <PostForm isOpen={isOpen} onClose={() => setOpen(false)} />
+
       <List className={classes.list}>
           {state.posts.map((post, i) => (
               <React.Fragment key={i}>
@@ -90,7 +94,7 @@ const Index = (props) => {
           ))}
       </List>
 
-      <Fab className={classes.fab}>
+      <Fab className={classes.fab} onClick={() => setOpen(true)}>
           <AddIcon />
       </Fab>
       {err && (
