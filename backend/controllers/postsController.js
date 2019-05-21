@@ -3,9 +3,15 @@ const _ = require('lodash');
 const Post = require('../models').post;
 
 const list = async (req, res, next) => {
+  const { limit, offset } = req.query;
+  console.log('====================================');
+  console.log(`limit ${limit}, offset: ${offset}`);
+  console.log('====================================');
   let posts;
   try {
     posts = await Post.findAll({
+      limit: Number(limit),
+      offset: Number(offset),
       where: {
         user_id: req.user.id
       },

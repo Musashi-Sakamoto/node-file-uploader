@@ -53,6 +53,10 @@ const Index = (props) => {
       res = await axios.get('http://localhost:3000/api/v1/posts', {
         headers: {
           Authorization: `Bearer ${token}`
+        },
+        params: {
+          limit: 50,
+          offset: 0
         }
       });
     }
