@@ -142,6 +142,26 @@ const Index = (props) => {
     setOpen(true);
   };
 
+  const editData = async (title, description) => {
+    let res;
+    try {
+      res = await axios.put(`http://localhost:3000/api/v1/posts/${selectedPost.id}`, { title, description }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+    catch (error) {
+      if (error.response.status === 401) {
+        Router.push('/login');
+        return;
+      }
+      setError(error.response.data.error.message);
+    }
+    setOpen(false);
+    fetchData();
+  };
+
   const deleteData = id => async () => {
     let res;
     try {
@@ -200,7 +220,7 @@ const Index = (props) => {
     <div className={classes.root}>
       <Navbar isLoggedIn token={token}/>
 
-      <PostForm editedPost={selectedPost} isOpen={isOpen} onClose={handleClose} onSubmit={postData} />
+      <PostForm editedPost={selectedPost} isOpen={isOpen} onClose={handleClose} onSubmit={selectedPost ? editData : postData} />
 
       <List className={classes.list}>
           {state.posts.map((post, i) => (
