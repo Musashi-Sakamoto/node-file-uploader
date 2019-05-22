@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import JssProvider from 'react-jss/lib/JssProvider';
+import { SnackbarProvider } from 'notistack';
 import getPageContext from '../src/getPageContext';
 import { StoreProvider } from '../utils/Store';
 
@@ -25,6 +26,7 @@ class MyApp extends App {
     const { Component, pageProps } = this.props;
     return (
       <Container>
+        <SnackbarProvider>
         <StoreProvider>
         <Head>
           <title>My page</title>
@@ -48,6 +50,7 @@ class MyApp extends App {
           </MuiThemeProvider>
         </JssProvider>
         </StoreProvider>
+        </SnackbarProvider>
       </Container>
     );
   }

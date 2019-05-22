@@ -5,6 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { withStyles } from '@material-ui/core/styles';
+import { withSnackbar } from 'notistack';
 import Button from '@material-ui/core/Button';
 
 const styles = () => ({
@@ -25,20 +26,18 @@ const styles = () => ({
 });
 
 const PostForm = ({
-  classes, onSubmit, isOpen, onClose, editedPost
+  classes, onSubmit, isOpen, onClose, editedPost, enqueueSnackbar
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [err, setError] = useState('');
 
   const onSubmitClicked = () => {
     if (title.trim().length === 0 || description.trim().length === 0) {
-      setError('title or description should not be blank');
+      enqueueSnackbar('title or description should not be blank', { variant: 'error' });
       return;
     }
     setTitle('');
     setDescription('');
-    setError('');
     onSubmit(title, description);
   };
 
@@ -92,4 +91,4 @@ const PostForm = ({
   );
 };
 
-export default withStyles(styles)(PostForm);
+export default withSnackbar(withStyles(styles)(PostForm));

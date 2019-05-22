@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import Router from 'next/router';
-import cookie from 'js-cookie';
-import axios from 'axios';
+import { withSnackbar } from 'notistack';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -23,14 +21,15 @@ const styles = () => ({
   }
 });
 
-const Form = ({ classes, onSubmit, isLogin }) => {
+const Form = ({
+  classes, onSubmit, isLogin, enqueueSnackbar
+}) => {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [err, setError] = useState('');
 
   const onSubmitClicked = () => {
     if (username.trim().length === 0 || password.trim().length === 0) {
-      setError('Username or Password should not be blank');
+      enqueueSnackbar('Username or Password should not be blank', { variant: 'error' });
       return;
     }
     onSubmit(username, password);
@@ -63,4 +62,4 @@ const Form = ({ classes, onSubmit, isLogin }) => {
   );
 };
 
-export default withStyles(styles)(Form);
+export default withSnackbar(withStyles(styles)(Form));

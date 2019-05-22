@@ -12,6 +12,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { withStyles } from '@material-ui/core/styles';
 import ReactPaginate from 'react-paginate';
+import { withSnackbar } from 'notistack';
 
 import { Store } from '../utils/Store';
 import Navbar from '../components/Navbar';
@@ -103,7 +104,6 @@ const Index = (props) => {
   const { state, dispatch } = useContext(Store);
 
   const { token, classes } = props;
-  const [err, setError] = useState('');
   const [isOpen, setOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [pageCount, setPageCount] = useState(0);
@@ -125,10 +125,12 @@ const Index = (props) => {
     }
     catch (error) {
       if (error.response.status === 401) {
+        props.enqueueSnackbar('not authorized');
         Router.push('/login');
         return;
       }
-      setError(error.response.data.error.message);
+      props.enqueueSnackbar(error.response.data.error.message);
+      return;
     }
 
     return dispatch({
@@ -156,7 +158,8 @@ const Index = (props) => {
         Router.push('/login');
         return;
       }
-      setError(error.response.data.error.message);
+      props.enqueueSnackbar(error.response.data.error.message);
+      return;
     }
     setOpen(false);
     fetchData();
@@ -176,7 +179,8 @@ const Index = (props) => {
         Router.push('/login');
         return;
       }
-      setError(error.response.data.error.message);
+      props.enqueueSnackbar(error.response.data.error.message);
+      return;
     }
     fetchData();
   };
@@ -195,7 +199,8 @@ const Index = (props) => {
         Router.push('/login');
         return;
       }
-      setError(error.response.data.error.message);
+      props.enqueueSnackbar(error.response.data.error.message);
+      return;
     }
     setOpen(false);
     fetchData();
@@ -266,10 +271,6 @@ const Index = (props) => {
           activeLinkClassName={classes.activeLink}
           disabledClassName={classes.disable}
         />
-
-      {err && (
-        <p>{err}</p>
-      )}
     </div>
   );
 };
@@ -289,4 +290,4 @@ Index.getInitialProps = (ctx) => {
   return { token };
 };
 
-export default withStyles(styles)(Index);
+export default withSnackbar(withStyles(styles)(Index));
