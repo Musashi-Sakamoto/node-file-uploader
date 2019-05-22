@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { withStyles } from '@material-ui/core/styles';
 import ReactPaginate from 'react-paginate';
 
@@ -39,6 +40,10 @@ const styles = () => ({
     left: 'auto',
     right: 400,
     bottom: 50
+  },
+  delete: {
+    height: 36,
+    width: 36
   },
   pagerContainer: {
     display: 'block',
@@ -122,6 +127,25 @@ const Index = (props) => {
     });
   };
 
+  const deleteData = id => async () => {
+    let res;
+    try {
+      res = await axios.delete(`http://localhost:3000/api/v1/posts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+    catch (error) {
+      if (error.response.status === 401) {
+        Router.push('/login');
+        return;
+      }
+      setError(error.response.data.error.message);
+    }
+    fetchData();
+  };
+
   const postData = async (title, description) => {
     let res;
     try {
@@ -166,6 +190,9 @@ const Index = (props) => {
                       primary: classes.primary,
                       secondary: classes.secondary
                     }} primary={post.title} secondary={post.description}/>
+                    <Fab className={classes.delete} onClick={deleteData(post.id)}>
+                      <DeleteIcon />
+                    </Fab>
                 </ListItem>
                 <Divider />
               </React.Fragment>
