@@ -105,6 +105,7 @@ const Index = (props) => {
   const { token, classes } = props;
   const [err, setError] = useState('');
   const [isOpen, setOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [offset, setOffset] = useState(0);
 
@@ -134,6 +135,11 @@ const Index = (props) => {
       type: 'FETCH_DATA',
       payload: res.data.posts.rows
     });
+  };
+
+  const updateData = post => () => {
+    setSelectedPost(post);
+    setOpen(true);
   };
 
   const deleteData = id => async () => {
@@ -175,6 +181,11 @@ const Index = (props) => {
     fetchData();
   };
 
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedPost(null);
+  };
+
   const handlePageClick = (data) => {
     const { selected } = data;
     const num = Math.ceil(selected * 20);
@@ -189,7 +200,7 @@ const Index = (props) => {
     <div className={classes.root}>
       <Navbar isLoggedIn token={token}/>
 
-      <PostForm isOpen={isOpen} onClose={() => setOpen(false)} onSubmit={postData} />
+      <PostForm editedPost={selectedPost} isOpen={isOpen} onClose={handleClose} onSubmit={postData} />
 
       <List className={classes.list}>
           {state.posts.map((post, i) => (
@@ -203,7 +214,7 @@ const Index = (props) => {
                     <Fab className={classes.delete} size='small' onClick={deleteData(post.id)}>
                       <DeleteIcon />
                     </Fab>
-                    <Fab className={classes.edit} size='small' onClick={deleteData(post.id)}>
+                    <Fab className={classes.edit} size='small' onClick={updateData(post)}>
                       <EditIcon />
                     </Fab>
                 </ListItem>

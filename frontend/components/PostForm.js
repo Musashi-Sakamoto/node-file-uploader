@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -25,7 +25,7 @@ const styles = () => ({
 });
 
 const PostForm = ({
-  classes, onSubmit, isOpen, onClose
+  classes, onSubmit, isOpen, onClose, editedPost
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -42,6 +42,11 @@ const PostForm = ({
     onSubmit(title, description);
   };
 
+  useEffect(() => {
+    setTitle(editedPost ? editedPost.title : '');
+    setDescription(editedPost ? editedPost.description : '');
+  }, [editedPost]);
+
   return (
     <div>
         <Dialog
@@ -49,7 +54,7 @@ const PostForm = ({
             onClose={onClose}
             aria-labelledby="form-dialog-title"
             >
-            <DialogTitle id="form-dialog-title">Post</DialogTitle>
+            <DialogTitle id="form-dialog-title">{editedPost !== null ? 'Edit' : 'Post'}</DialogTitle>
             <DialogContent>
             <TextField
             value={title}
@@ -79,7 +84,7 @@ const PostForm = ({
                     Cancel
                 </Button>
                 <Button onClick={onSubmitClicked} color="primary">
-                    Post
+                  {editedPost !== null ? 'Edit' : 'Post'}
                 </Button>
           </DialogActions>
         </Dialog>
