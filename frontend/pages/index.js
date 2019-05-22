@@ -139,7 +139,9 @@ const Index = (props) => {
       props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
+    props.enqueueSnackbar(`${title} has been updated!`, { variant: 'success' });
     setOpen(false);
+    setSelectedPost(null);
     fetchData();
   };
 
@@ -166,7 +168,9 @@ const Index = (props) => {
       props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
+    props.enqueueSnackbar(`${selectedPost.title} has been deleted!`, { variant: 'success' });
     setDeleteOpen(false);
+    setSelectedPost(null);
     fetchData();
   };
 
@@ -188,6 +192,7 @@ const Index = (props) => {
       props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
+    props.enqueueSnackbar(`${title} has been created!`, { variant: 'success' });
     setOpen(false);
     fetchData();
   };
