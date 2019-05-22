@@ -9,6 +9,7 @@ import Divider from '@material-ui/core/Divider';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import { withStyles } from '@material-ui/core/styles';
 import ReactPaginate from 'react-paginate';
 
@@ -22,8 +23,11 @@ const styles = () => ({
   },
   list: {
     marginTop: 64,
-    width: 360,
+    width: 400,
     margin: 'auto'
+  },
+  textRoot: {
+    width: 240
   },
   primary: {
     textAlign: 'center'
@@ -42,8 +46,13 @@ const styles = () => ({
     bottom: 50
   },
   delete: {
-    height: 36,
-    width: 36
+    height: 40,
+    width: 40
+  },
+  edit: {
+    marginLeft: 20,
+    height: 40,
+    width: 40
   },
   pagerContainer: {
     display: 'block',
@@ -187,11 +196,15 @@ const Index = (props) => {
               <React.Fragment key={i}>
                 <ListItem>
                     <ListItemText classes={{
+                      root: classes.textRoot,
                       primary: classes.primary,
                       secondary: classes.secondary
                     }} primary={post.title} secondary={post.description}/>
-                    <Fab className={classes.delete} onClick={deleteData(post.id)}>
+                    <Fab className={classes.delete} size='small' onClick={deleteData(post.id)}>
                       <DeleteIcon />
+                    </Fab>
+                    <Fab className={classes.edit} size='small' onClick={deleteData(post.id)}>
+                      <EditIcon />
                     </Fab>
                 </ListItem>
                 <Divider />
