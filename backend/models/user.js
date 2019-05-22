@@ -10,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       targetKey: 'id'
     });
+
+    models.user.hasMany(models.post, {
+      foreignKey: 'user_id',
+      targetKey: 'id'
+    });
   };
   return user;
 };
