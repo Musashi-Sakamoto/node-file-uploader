@@ -3,13 +3,8 @@ import cookies from 'next-cookies';
 import Router from 'next/router';
 import axios from 'axios';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import { withStyles } from '@material-ui/core/styles';
 import ReactPaginate from 'react-paginate';
 import { withSnackbar } from 'notistack';
@@ -18,6 +13,7 @@ import { Store } from '../utils/Store';
 import Navbar from '../components/Navbar';
 import PostForm from '../components/PostForm';
 import AlertDialog from '../components/AlertDialog';
+import PostCell from '../components/PostCell';
 
 const styles = () => ({
   root: {
@@ -28,33 +24,12 @@ const styles = () => ({
     width: 400,
     margin: 'auto'
   },
-  textRoot: {
-    width: 240
-  },
-  primary: {
-    textAlign: 'center'
-  },
-  secondary: {
-    textAlign: 'center',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap'
-  },
   fab: {
     position: 'fixed',
     top: 'auto',
     left: 'auto',
     right: 400,
     bottom: 50
-  },
-  delete: {
-    height: 40,
-    width: 40
-  },
-  edit: {
-    marginLeft: 20,
-    height: 40,
-    width: 40
   },
   pagerContainer: {
     display: 'block',
@@ -246,22 +221,7 @@ const Index = (props) => {
 
       <List className={classes.list}>
           {state.posts.map((post, i) => (
-              <React.Fragment key={i}>
-                <ListItem>
-                    <ListItemText classes={{
-                      root: classes.textRoot,
-                      primary: classes.primary,
-                      secondary: classes.secondary
-                    }} primary={post.title} secondary={post.description}/>
-                    <Fab className={classes.delete} size='small' onClick={deleteModal(post)}>
-                      <DeleteIcon />
-                    </Fab>
-                    <Fab className={classes.edit} size='small' onClick={updateData(post)}>
-                      <EditIcon />
-                    </Fab>
-                </ListItem>
-                <Divider />
-              </React.Fragment>
+              <PostCell key={i} post={post} onDelete={deleteModal} onEdit={updateData} />
           ))}
       </List>
 
