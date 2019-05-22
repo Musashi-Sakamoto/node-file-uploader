@@ -17,6 +17,7 @@ import { withSnackbar } from 'notistack';
 import { Store } from '../utils/Store';
 import Navbar from '../components/Navbar';
 import PostForm from '../components/PostForm';
+import AlertDialog from '../components/AlertDialog';
 
 const styles = () => ({
   root: {
@@ -105,6 +106,7 @@ const Index = (props) => {
 
   const { token, classes } = props;
   const [isOpen, setOpen] = useState(false);
+  const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [offset, setOffset] = useState(0);
@@ -125,11 +127,11 @@ const Index = (props) => {
     }
     catch (error) {
       if (error.response.status === 401) {
-        props.enqueueSnackbar('not authorized');
+        props.enqueueSnackbar('not authorized', { variant: 'error' });
         Router.push('/login');
         return;
       }
-      props.enqueueSnackbar(error.response.data.error.message);
+      props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
 
@@ -155,20 +157,26 @@ const Index = (props) => {
     }
     catch (error) {
       if (error.response.status === 401) {
+        props.enqueueSnackbar('not authorized', { variant: 'error' });
         Router.push('/login');
         return;
       }
-      props.enqueueSnackbar(error.response.data.error.message);
+      props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
     setOpen(false);
     fetchData();
   };
 
-  const deleteData = id => async () => {
+  const deleteModal = post => () => {
+    setSelectedPost(post);
+    setDeleteOpen(true);
+  };
+
+  const deleteData = async () => {
     let res;
     try {
-      res = await axios.delete(`http://localhost:3000/api/v1/posts/${id}`, {
+      res = await axios.delete(`http://localhost:3000/api/v1/posts/${selectedPost.id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -177,11 +185,13 @@ const Index = (props) => {
     catch (error) {
       if (error.response.status === 401) {
         Router.push('/login');
+        props.enqueueSnackbar('not authorized', { variant: 'error' });
         return;
       }
-      props.enqueueSnackbar(error.response.data.error.message);
+      props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
+    setDeleteOpen(false);
     fetchData();
   };
 
@@ -197,13 +207,19 @@ const Index = (props) => {
     catch (error) {
       if (error.response.status === 401) {
         Router.push('/login');
+        props.enqueueSnackbar('not authorized', { variant: 'error' });
         return;
       }
-      props.enqueueSnackbar(error.response.data.error.message);
+      props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
     setOpen(false);
     fetchData();
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteOpen(false);
+    setSelectedPost(null);
   };
 
   const handleClose = () => {
@@ -226,6 +242,7 @@ const Index = (props) => {
       <Navbar isLoggedIn token={token}/>
 
       <PostForm editedPost={selectedPost} isOpen={isOpen} onClose={handleClose} onSubmit={selectedPost ? editData : postData} />
+      <AlertDialog deletedPost={selectedPost} isOpen={isDeleteOpen} onClose={handleDeleteClose} onSubmit={deleteData} />
 
       <List className={classes.list}>
           {state.posts.map((post, i) => (
@@ -236,7 +253,7 @@ const Index = (props) => {
                       primary: classes.primary,
                       secondary: classes.secondary
                     }} primary={post.title} secondary={post.description}/>
-                    <Fab className={classes.delete} size='small' onClick={deleteData(post.id)}>
+                    <Fab className={classes.delete} size='small' onClick={deleteModal(post)}>
                       <DeleteIcon />
                     </Fab>
                     <Fab className={classes.edit} size='small' onClick={updateData(post)}>

@@ -36,9 +36,9 @@ const PostForm = ({
       enqueueSnackbar('title or description should not be blank', { variant: 'error' });
       return;
     }
+    onSubmit(title, description);
     setTitle('');
     setDescription('');
-    onSubmit(title, description);
   };
 
   useEffect(() => {
