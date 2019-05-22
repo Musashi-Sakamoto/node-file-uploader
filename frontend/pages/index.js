@@ -28,7 +28,10 @@ const styles = () => ({
     textAlign: 'center'
   },
   secondary: {
-    textAlign: 'center'
+    textAlign: 'center',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
   },
   fab: {
     position: 'fixed',
@@ -39,7 +42,7 @@ const styles = () => ({
   },
   pagerContainer: {
     display: 'block',
-    width: 240,
+    width: 280,
     margin: 'auto',
     paddingLeft: 15,
     paddingRight: 15
