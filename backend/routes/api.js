@@ -8,6 +8,7 @@ const postController = require('../controllers/postsController');
 
 router.post('/login', authController.login);
 router.get('/logout', passport.authenticate('jwt', { session: false }), authController.logout);
+router.get('/verification', authController.verify);
 
 router.post('/images', passport.authenticate('jwt', { session: false }), imageController.imageUpload);
 router.get('/images', passport.authenticate('jwt', { session: false }), imageController.list);

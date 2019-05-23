@@ -3,6 +3,7 @@ const passport = require('passport');
 const Redis = require('ioredis');
 const createError = require('http-errors');
 const User = require('../models').user;
+const VerificationToken = require('../models').verificationToken;
 
 const redis = new Redis({
   host: process.env.REDIS_ENDPOINT
@@ -53,12 +54,57 @@ const login = async (req, res, next) => {
 const logout = async (req, res, next) => {
   await redis.del(req.user.id);
   req.logout();
-  res.status(200).json({
+  return res.status(200).json({
     message: 'Accepted'
   });
 };
 
+const verify = async (req, res, next) => {
+  const { email, token } = req.query;
+  let user;
+  try {
+    user = await User.findOne({
+      where: {
+        email
+      }
+    });
+  }
+  catch (error) {
+    return next(new createError.InternalServerError('DB Error[auth verify 1]'));
+  }
+  if (!user) {
+    return next(new createError.NotFound('Email not found'));
+  }
+  if (user.isVerified) {
+    return res.status(202).json({
+      message: 'Email already verified'
+    });
+  }
+  let verificationToken;
+  try {
+    verificationToken = await VerificationToken.findOne({
+      where: {
+        token
+      }
+    });
+  }
+  catch (error) {
+    return next(new createError.InternalServerError('DB Error [auth verify 2]'));
+  }
+  if (!verificationToken) {
+    return next(new createError.NotFound('Token expired'));
+  }
+  try {
+    await user.update({ isVerified: true });
+  }
+  catch (error) {
+    return next(new createError.InternalServerError('DB Error [auth verify 3]'));
+  }
+  return res.status(204).json(`User with ${user.email} has been verified`);
+};
+
 module.exports = {
   login,
-  logout
+  logout,
+  verify
 };

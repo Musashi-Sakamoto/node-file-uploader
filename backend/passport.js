@@ -30,6 +30,9 @@ passport.use(new LocalStrategy({
   if (!isValid) {
     return done(null, false, { message: 'Incorrect password.' });
   }
+  if (!user.isVerified) {
+    return done(null, false, { message: 'User not verified' });
+  }
   return done(null, user.toJSON(), { message: 'Login succeeded!' });
 }));
 
