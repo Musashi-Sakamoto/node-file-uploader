@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import cookies from 'next-cookies';
 import Router from 'next/router';
-import axios from 'axios';
 import List from '@material-ui/core/List';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core/styles';
 import ReactPaginate from 'react-paginate';
 import { withSnackbar } from 'notistack';
+import axios from '../utils/wrappedAxios';
 
 import { Store } from '../utils/Store';
 import Navbar from '../components/Navbar';
@@ -101,11 +101,6 @@ const Index = (props) => {
       setPageCount(Math.ceil(res.data.posts.count / 20));
     }
     catch (error) {
-      if (error.response.status === 401) {
-        props.enqueueSnackbar('not authorized', { variant: 'error' });
-        Router.push('/login');
-        return;
-      }
       props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
@@ -131,11 +126,6 @@ const Index = (props) => {
       });
     }
     catch (error) {
-      if (error.response.status === 401) {
-        props.enqueueSnackbar('not authorized', { variant: 'error' });
-        Router.push('/login');
-        return;
-      }
       props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
@@ -160,11 +150,6 @@ const Index = (props) => {
       });
     }
     catch (error) {
-      if (error.response.status === 401) {
-        Router.push('/login');
-        props.enqueueSnackbar('not authorized', { variant: 'error' });
-        return;
-      }
       props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
@@ -184,11 +169,6 @@ const Index = (props) => {
       });
     }
     catch (error) {
-      if (error.response.status === 401) {
-        Router.push('/login');
-        props.enqueueSnackbar('not authorized', { variant: 'error' });
-        return;
-      }
       props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
       return;
     }
