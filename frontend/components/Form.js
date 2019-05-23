@@ -25,6 +25,7 @@ const Form = ({
   classes, onSubmit, isLogin, enqueueSnackbar
 }) => {
   const [username, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const onSubmitClicked = () => {
@@ -32,12 +33,32 @@ const Form = ({
       enqueueSnackbar('Username or Password should not be blank', { variant: 'error' });
       return;
     }
-    onSubmit(username, password);
+    if (!isLogin && email.trim().length === 0) {
+      enqueueSnackbar('email should not be blank', { variant: 'error' });
+      return;
+    }
+    if (isLogin) {
+      onSubmit(username, password);
+    }
+    else {
+      onSubmit(email, username, password);
+    }
   };
 
   return (
     <div className={classes.container}>
       <div className={classes.formContainer}>
+          {!isLogin && (
+            <TextField
+            className={classes.TextField}
+            label="email"
+             value={email}
+             onChange={e => setEmail(e.target.value)}
+             placeholder="email"
+             type="text"
+             name="email"
+             required />
+          )}
            <TextField
            className={classes.TextField}
            label="username"
