@@ -100,7 +100,7 @@ const verify = async (req, res, next) => {
   catch (error) {
     return next(new createError.InternalServerError('DB Error [auth verify 3]'));
   }
-  return res.status(204).json(`User with ${user.email} has been verified`);
+  return res.redirect('http://localhost:8000/login?confirmation=done');
 };
 
 module.exports = {
