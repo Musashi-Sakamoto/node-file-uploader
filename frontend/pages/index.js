@@ -159,14 +159,23 @@ const Index = (props) => {
     fetchData();
   };
 
-  const postData = async (title, description) => {
-    let res;
+  const postData = async (title, description, file) => {
     try {
-      res = await axios.post('http://localhost:3000/api/v1/posts', { title, description }, {
+      const res = await axios.post('http://localhost:3000/api/v1/posts', { title, description }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
+      if (file) {
+        const form = new FormData();
+        form.append('image', file, res.data.post.id);
+        await axios.post('http://localhost:3000/api/v1/images', form, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+      }
     }
     catch (error) {
       props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });

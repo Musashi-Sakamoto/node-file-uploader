@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const _ = require('lodash');
 const Post = require('../models').post;
+const Image = require('../models').image;
 
 const list = async (req, res, next) => {
   const { limit, offset } = req.query;
@@ -17,7 +18,10 @@ const list = async (req, res, next) => {
       },
       order: [
         ['createdAt', 'DESC']
-      ]
+      ],
+      include: [{
+        model: Image
+      }]
     });
   }
   catch (error) {

@@ -32,6 +32,9 @@ const imageUpload = async (req, res, next) => {
     next(new createError.UnprocessableEntity('File is not accepted'));
     return;
   }
+  console.log('====================================');
+  console.log(req.file.originalname);
+  console.log('====================================');
   if (!req.file) {
     next(new createError.BadRequest('File not uploaded.'));
     return;
@@ -40,7 +43,7 @@ const imageUpload = async (req, res, next) => {
   try {
     image = await Image.create({
       key: req.file.key,
-      user_id: req.user.id
+      post_id: req.file.originalname
     });
   }
   catch (error) {

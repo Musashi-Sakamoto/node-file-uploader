@@ -8,10 +8,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   user.associate = function (models) {
     // associations can be defined here
-    models.user.hasMany(models.image, {
-      foreignKey: 'user_id',
-      targetKey: 'id'
-    });
 
     models.user.hasMany(models.post, {
       foreignKey: 'user_id',

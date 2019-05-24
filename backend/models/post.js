@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       targetKey: 'id'
     });
+
+    models.post.hasMany(models.image, {
+      foreignKey: 'post_id',
+      targetKey: 'id'
+    });
   };
   return post;
 };

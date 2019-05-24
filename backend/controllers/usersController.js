@@ -9,10 +9,7 @@ const list = async (req, res, next) => {
   let users;
   try {
     users = await User.findAll({
-      attributes: ['id', 'name'],
-      include: [{
-        model: Image
-      }]
+      attributes: ['id', 'name']
     });
   }
   catch (error) {

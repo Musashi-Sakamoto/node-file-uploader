@@ -44,21 +44,21 @@ const PostForm = ({
       enqueueSnackbar('title or description should not be blank', { variant: 'error' });
       return;
     }
-    onSubmit(title, description);
+    onSubmit(title, description, file);
     setTitle('');
     setDescription('');
   };
 
   const onImagePick = (e) => {
     e.preventDefault();
-    let reader = new FileReader();
-    let file = e.target.files[0];
+    const reader = new FileReader();
+    const file = e.target.files[0];
     reader.onloadend = () => {
       setFile(file);
       setImagePreviewUrl(reader.result);
-    }
+    };
     reader.readAsDataURL(file);
-  }
+  };
 
   useEffect(() => {
     setTitle(editedPost ? editedPost.title : '');
@@ -115,8 +115,8 @@ const PostForm = ({
                   type="file" />
                   <label htmlFor="text-button-file">
                     <Button component="span">
-                      Image  
-                    </Button> 
+                      Image
+                    </Button>
                   </label>
                 <Button onClick={onSubmitClicked} color="primary">
                   {editedPost !== null ? 'Edit' : 'Post'}
