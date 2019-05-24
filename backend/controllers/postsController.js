@@ -3,14 +3,16 @@ const _ = require('lodash');
 const Post = require('../models').post;
 const Image = require('../models').image;
 
+const { getS3SignedUrl } = require('../utils/s3Control');
+
 const list = async (req, res, next) => {
   const { limit, offset } = req.query;
   console.log('====================================');
   console.log(`limit ${limit}, offset: ${offset}`);
   console.log('====================================');
-  let posts;
+  let newPosts;
   try {
-    posts = await Post.findAndCountAll({
+    const postData = await Post.findAndCountAll({
       limit: Number(limit),
       offset: Number(offset),
       where: {
@@ -20,15 +22,36 @@ const list = async (req, res, next) => {
         ['createdAt', 'DESC']
       ],
       include: [{
-        model: Image
+        model: Image,
+        attributes: ['key']
       }]
     });
+    newPosts = {};
+    const posts = postData.rows;
+    newPosts.rows = await Promise.all(posts.map(async (pos) => {
+      const returnedValue = {
+        id: pos.id,
+        title: pos.title,
+        description: pos.description,
+        createdAt: pos.createdAt,
+        updatedAt: pos.updatedAt,
+        user_id: pos.user_id
+      };
+      if (pos.images.length > 0) {
+        returnedValue.presignedUrl = await getS3SignedUrl(pos.images[0].key);
+      }
+      return returnedValue;
+    }));
+    newPosts.count = postData.count;
   }
   catch (error) {
+    console.log('====================================');
+    console.log(error);
+    console.log('====================================');
     return next(new createError.InternalServerError('DB Error'));
   }
   return res.status(200).json({
-    posts
+    posts: newPosts
   });
 };
 

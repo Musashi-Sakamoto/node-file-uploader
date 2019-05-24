@@ -1,6 +1,7 @@
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const aws = require('aws-sdk');
+const { promisify } = require('util');
 
 aws.config.update({
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -12,6 +13,15 @@ aws.config.update({
 });
 
 const s3 = new aws.S3();
+const getSignedUrlAsync = promisify(s3.getSignedUrl.bind(s3));
+
+const getS3SignedUrl = async (key, op = 'getObject') => {
+  const params = {
+    Bucket: 'images',
+    Key: key
+  };
+  return getSignedUrlAsync(op, params);
+};
 
 const upload = multer({
   storage: multerS3({
@@ -38,5 +48,6 @@ const deleteS3Object = (key) => {
 
 module.exports = {
   deleteS3Object,
-  upload
+  upload,
+  getS3SignedUrl
 };

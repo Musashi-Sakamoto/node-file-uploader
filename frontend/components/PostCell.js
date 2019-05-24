@@ -35,6 +35,9 @@ const styles = () => ({
     width: 400,
     padding: 16,
     wordBreak: 'break-word'
+  },
+  image: {
+    width: 400
   }
 });
 
@@ -61,6 +64,9 @@ const PostCell = ({
           <Typography className={classes.description}>
               {post.description}
           </Typography>
+          {post.presignedUrl && (
+              <img className={classes.image} src={post.presignedUrl} />
+          )}
         </Collapse>
         <Divider />
     </React.Fragment>
