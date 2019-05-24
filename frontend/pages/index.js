@@ -107,7 +107,7 @@ const Index = (props) => {
 
     return dispatch({
       type: 'FETCH_DATA',
-      payload: res.data.posts.rows
+      payload: res.data.posts
     });
   };
 
@@ -213,26 +213,28 @@ const Index = (props) => {
       <Fab className={classes.fab} onClick={() => setOpen(true)}>
           <AddIcon />
       </Fab>
-      <ReactPaginate
-          previousLabel={'<'}
-          nextLabel={'>'}
-          breakLabel={'...'}
-          breakClassName={'break-me'}
-          pageCount={pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={handlePageClick}
-          containerClassName={classes.pagerContainer}
-          pageClassName={classes.pager}
-          pageLinkClassName={classes.pagerLink}
-          previousClassName={classes.previous}
-          previousLinkClassName={classes.previousLink}
-          nextLinkClassName={classes.nextLink}
-          nextClassName={classes.next}
-          activeClassName={classes.active}
-          activeLinkClassName={classes.activeLink}
-          disabledClassName={classes.disable}
-        />
+      {state.count > 20 && (
+        <ReactPaginate
+        previousLabel={'<'}
+        nextLabel={'>'}
+        breakLabel={'...'}
+        breakClassName={'break-me'}
+        pageCount={pageCount}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={handlePageClick}
+        containerClassName={classes.pagerContainer}
+        pageClassName={classes.pager}
+        pageLinkClassName={classes.pagerLink}
+        previousClassName={classes.previous}
+        previousLinkClassName={classes.previousLink}
+        nextLinkClassName={classes.nextLink}
+        nextClassName={classes.next}
+        activeClassName={classes.active}
+        activeLinkClassName={classes.activeLink}
+        disabledClassName={classes.disable}
+      />
+      )}
     </div>
   );
 };
