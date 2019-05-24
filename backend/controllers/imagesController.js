@@ -29,6 +29,9 @@ const imageUpload = async (req, res, next) => {
     await singleUpload(req, res);
   }
   catch (error) {
+    console.log('====================================');
+    console.log(error);
+    console.log('====================================');
     next(new createError.UnprocessableEntity('File is not accepted'));
     return;
   }

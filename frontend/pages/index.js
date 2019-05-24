@@ -116,7 +116,7 @@ const Index = (props) => {
     setOpen(true);
   };
 
-  const editData = async (title, description) => {
+  const editData = async (title, description, file) => {
     let res;
     try {
       res = await axios.put(`http://localhost:3000/api/v1/posts/${selectedPost.id}`, { title, description }, {
@@ -124,6 +124,16 @@ const Index = (props) => {
           Authorization: `Bearer ${token}`
         }
       });
+      if (file) {
+        const form = new FormData();
+        form.append('image', file, selectedPost.id);
+        await axios.post('http://localhost:3000/api/v1/images', form, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+      }
     }
     catch (error) {
       props.enqueueSnackbar(error.response.data.error.message, { variant: 'error' });
