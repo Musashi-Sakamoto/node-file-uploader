@@ -22,6 +22,12 @@ const styles = () => ({
   },
   button: {
     marginTop: 20
+  },
+  input: {
+    display: 'none'
+  },
+  previewImage: {
+    maxWidth: 552
   }
 });
 
@@ -30,6 +36,8 @@ const PostForm = ({
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [file, setFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
 
   const onSubmitClicked = () => {
     if (title.trim().length === 0 || description.trim().length === 0) {
@@ -41,9 +49,22 @@ const PostForm = ({
     setDescription('');
   };
 
+  const onImagePick = (e) => {
+    e.preventDefault();
+    let reader = new FileReader();
+    let file = e.target.files[0];
+    reader.onloadend = () => {
+      setFile(file);
+      setImagePreviewUrl(reader.result);
+    }
+    reader.readAsDataURL(file);
+  }
+
   useEffect(() => {
     setTitle(editedPost ? editedPost.title : '');
     setDescription(editedPost ? editedPost.description : '');
+    setFile(null);
+    setImagePreviewUrl('');
   }, [editedPost]);
 
   return (
@@ -77,11 +98,26 @@ const PostForm = ({
               rows={5}
               fullWidth
             />
+            {imagePreviewUrl !== '' && (
+              <img className={classes.previewImage} src={imagePreviewUrl} />
+            )}
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose} color="primary">
                     Cancel
                 </Button>
+                <input
+                  accept="image/*"
+                  className={classes.input}
+                  id="text-button-file"
+                  multiple
+                  onChange={onImagePick}
+                  type="file" />
+                  <label htmlFor="text-button-file">
+                    <Button component="span">
+                      Image  
+                    </Button> 
+                  </label>
                 <Button onClick={onSubmitClicked} color="primary">
                   {editedPost !== null ? 'Edit' : 'Post'}
                 </Button>
