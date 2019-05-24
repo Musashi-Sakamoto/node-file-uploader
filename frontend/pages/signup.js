@@ -6,12 +6,13 @@ import Form from '../components/Form';
 import Navbar from '../components/Navbar';
 
 const SignupForm = (props) => {
-  const onSignupClicked = async (name, password) => {
+  const onSignupClicked = async (email, name, password) => {
     let res;
     try {
       res = await axios.post('http://localhost:3000/api/v1/users', {
         name,
-        password
+        password,
+        email
       });
     }
     catch (error) {
@@ -21,6 +22,7 @@ const SignupForm = (props) => {
     const { data } = res;
 
     if (data.user) {
+      props.enqueueSnackbar('Please confirm yourself in the email', { variant: 'info' });
       Router.push('/login');
     }
   };

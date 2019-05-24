@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Router from 'next/router';
 import cookie from 'js-cookie';
 import axios from 'axios';
@@ -27,12 +27,26 @@ const LoginForm = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (props.confirmation) {
+      props.enqueueSnackbar('User confirmed!', { variant: 'success' });
+    }
+  }, []);
+
   return (
     <React.Fragment>
       <Navbar isLogin />
       <Form onSubmit={onLoginClicked} isLogin />
     </React.Fragment>
   );
+};
+
+LoginForm.getInitialProps = (ctx) => {
+  if (ctx.req) {
+    const { confirmation } = ctx.query;
+    return { confirmation };
+  }
+  return {};
 };
 
 export default withSnackbar(LoginForm);
