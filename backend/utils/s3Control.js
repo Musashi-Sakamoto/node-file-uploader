@@ -23,9 +23,18 @@ const getS3SignedUrl = async (key, op = 'getObject') => {
   return getSignedUrlAsync(op, params);
 };
 
+const s3ForMinio = new aws.S3();
+s3ForMinio.config.update({
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  region: 'ap-northeast-1',
+  endpoint: process.env.STORAGE_ENDPOINT_MINIO,
+  s3ForcePathStyle: true,
+  signatureVersion: 'v4'
+});
 const upload = multer({
   storage: multerS3({
-    s3,
+    s3: s3ForMinio,
     bucket: 'images',
     acl: 'public-read',
     metadata(req, file, cb) {
