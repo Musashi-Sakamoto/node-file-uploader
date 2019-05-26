@@ -2,6 +2,8 @@ const createError = require('http-errors');
 const _ = require('lodash');
 const Post = require('../models').post;
 const Image = require('../models').image;
+const { deleteS3Object } = require('../utils/s3Control');
+
 
 const { getS3SignedUrl } = require('../utils/s3Control');
 
@@ -137,7 +139,11 @@ const destroy = async (req, res, next) => {
     existingPost = await Post.findOne({
       where: {
         id
-      }
+      },
+      include: [{
+        model: Image,
+        attributes: ['key']
+      }]
     });
   }
   catch (error) {
@@ -148,6 +154,12 @@ const destroy = async (req, res, next) => {
   }
 
   try {
+    if (existingPost.images.length > 0) {
+      console.log(existingPost.images[0].key);
+
+      await deleteS3Object(existingPost.images[0].key);
+    }
+
     await Post.destroy({
       where: {
         id
@@ -155,6 +167,8 @@ const destroy = async (req, res, next) => {
     });
   }
   catch (error) {
+    console.log(error);
+
     return next(new createError.InternalServerError('DB Error'));
   }
 

@@ -1,6 +1,7 @@
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 const aws = require('aws-sdk');
+const Minio = require('minio');
 const { promisify } = require('util');
 
 aws.config.update({
@@ -47,12 +48,19 @@ const upload = multer({
 });
 
 const deleteS3Object = (key) => {
+  const minioClient = new Minio.Client({
+    endPoint: process.env.ENDPOINT_MINIO,
+    port: 9000,
+    useSSL: false,
+    accessKey: process.env.ACCESS_KEY_ID,
+    secretKey: process.env.SECRET_ACCESS_KEY
+  });
   const params = {
     Bucket: 'images',
     Key: key
   };
-
-  return s3.deleteObject(params).promise();
+  const removeObjectAsync = promisify(minioClient.removeObject.bind(minioClient));
+  return removeObjectAsync(params.Bucket, params.Key);
 };
 
 module.exports = {
