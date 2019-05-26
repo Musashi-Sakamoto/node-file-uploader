@@ -51,8 +51,9 @@ const PostCell = ({
         <ListItem onClick={() => setIsOpen(!isOpen)}>
             <ListItemText classes={{
               root: classes.textRoot,
-              primary: classes.primary
-            }} primary={post.title}/>
+              primary: classes.primary,
+              secondary: classes.secondary
+            }} primary={post.title} secondary={post.createdAt}/>
             <Fab className={classes.delete} size='small' onClick={onDelete(post)}>
                 <DeleteIcon />
             </Fab>
