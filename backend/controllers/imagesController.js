@@ -44,7 +44,7 @@ const imageUpload = async (req, res, next) => {
   }
   let image;
   try {
-    image = await Image.create({
+    image = await Image.upsert({
       key: req.file.key,
       post_id: req.file.originalname
     });
