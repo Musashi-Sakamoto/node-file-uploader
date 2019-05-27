@@ -11,6 +11,13 @@ axios.interceptors.response.use(response => response, (err) => {
       }
     }));
   }
+  if (!_.has(err, 'response.data')) {
+    return Promise.reject(_.set(err, 'response.data', {
+      error: {
+        message: 'Network Error'
+      }
+    }));
+  }
   return Promise.reject(err);
 });
 
