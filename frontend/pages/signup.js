@@ -5,11 +5,13 @@ import { withSnackbar } from 'notistack';
 import Form from '../components/Form';
 import Navbar from '../components/Navbar';
 
+import { BACKEND_URL } from '../utils/const';
+
 const SignupForm = (props) => {
   const onSignupClicked = async (email, name, password) => {
     let res;
     try {
-      res = await axios.post('http://localhost:3000/api/v1/users', {
+      res = await axios.post(`${BACKEND_URL}/users`, {
         name,
         password,
         email

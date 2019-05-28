@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Link from 'next/link';
 
+import { BACKEND_URL } from '../utils/const';
+
 const styles = {
   root: {
     flexGrow: 1
@@ -27,7 +29,7 @@ const Navbar = (props) => {
 
   const onLogoutClicked = async () => {
     try {
-      await axios.get('http://localhost:3000/api/v1/logout', {
+      await axios.get(`${BACKEND_URL}/logout`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

@@ -15,6 +15,8 @@ import PostForm from '../components/PostForm';
 import AlertDialog from '../components/AlertDialog';
 import PostCell from '../components/PostCell';
 
+import { BACKEND_URL } from '../utils/const';
+
 const styles = () => ({
   root: {
     position: 'relative'
@@ -89,7 +91,7 @@ const Index = (props) => {
   const fetchData = async () => {
     let res;
     try {
-      res = await axios.get('http://localhost:3000/api/v1/posts', {
+      res = await axios.get(`${BACKEND_URL}/posts`, {
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -119,7 +121,7 @@ const Index = (props) => {
   const editData = async (title, description, file) => {
     let res;
     try {
-      res = await axios.put(`http://localhost:3000/api/v1/posts/${selectedPost.id}`, { title, description }, {
+      res = await axios.put(`${BACKEND_URL}/posts/${selectedPost.id}`, { title, description }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -127,7 +129,7 @@ const Index = (props) => {
       if (file) {
         const form = new FormData();
         form.append('image', file, selectedPost.id);
-        await axios.post('http://localhost:3000/api/v1/images', form, {
+        await axios.post(`${BACKEND_URL}/images`, form, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
@@ -153,7 +155,7 @@ const Index = (props) => {
   const deleteData = async () => {
     let res;
     try {
-      res = await axios.delete(`http://localhost:3000/api/v1/posts/${selectedPost.id}`, {
+      res = await axios.delete(`${BACKEND_URL}/posts/${selectedPost.id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -171,7 +173,7 @@ const Index = (props) => {
 
   const postData = async (title, description, file) => {
     try {
-      const res = await axios.post('http://localhost:3000/api/v1/posts', { title, description }, {
+      const res = await axios.post(`${BACKEND_URL}/posts`, { title, description }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -179,7 +181,7 @@ const Index = (props) => {
       if (file) {
         const form = new FormData();
         form.append('image', file, res.data.post.id);
-        await axios.post('http://localhost:3000/api/v1/images', form, {
+        await axios.post(`${BACKEND_URL}/images`, form, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'
