@@ -1,3 +1,7 @@
+setup:
+  addons:
+    - plan: cleardb
+      as: DATABASE
 build:
   docker:
     web: ./backend/Dockerfile
