@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "nodemon ./bin/www",
-    "start": "pm2-runtime start ecosystem.config.js --env production",
+    "preinstall": "npm i -g pm2 && pm2 install pm2-logrotate",
+    "start": "pm2-runtime start ecosystem.config.js --env production && pm2 logs all",
     "lint": "eslint --fix .",
     "migrate": "npx sequelize db:migrate"
   },
@@ -28,7 +29,6 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "pm2": "^3.5.1",
     "sendgrid": "^5.2.3",
     "sequelize": "^5.7.0",
     "uuid": "^3.3.2"
