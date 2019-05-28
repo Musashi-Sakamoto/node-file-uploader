@@ -5,9 +5,9 @@ const createError = require('http-errors');
 const User = require('../models').user;
 const VerificationToken = require('../models').verificationToken;
 
-const redis = new Redis({
-  host: process.env.REDIS_ENDPOINT
-});
+const redis = new Redis(
+  process.env.REDIS_ENDPOINT
+);
 
 const login = async (req, res, next) => {
   passport.authenticate('local', { session: false }, async (err, user, info) => {

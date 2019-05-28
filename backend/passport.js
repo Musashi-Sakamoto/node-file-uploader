@@ -6,9 +6,9 @@ const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
 
-const redis = new Redis({
-  host: process.env.REDIS_ENDPOINT
-});
+const redis = new Redis(
+  process.env.REDIS_ENDPOINT
+);
 const User = require('./models').user;
 
 passport.use(new LocalStrategy({

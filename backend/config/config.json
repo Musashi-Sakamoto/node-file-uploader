@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "MusashiProject",
-    "host": "mysql",
+    "username": "b036b6e5880455",
+    "password": "e7941266",
+    "database": "heroku_2df199dfdc5ea4a",
+    "host": "us-cdbr-iron-east-02.cleardb.net",
     "dialect": "mysql"
   }
 }
