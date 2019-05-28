@@ -18,7 +18,7 @@ const getSignedUrlAsync = promisify(s3.getSignedUrl.bind(s3));
 
 const getS3SignedUrl = async (key, op = 'getObject') => {
   const params = {
-    Bucket: 'images',
+    Bucket: process.env.BUCKET_NAME,
     Key: key
   };
   return getSignedUrlAsync(op, params);
@@ -36,7 +36,7 @@ s3ForMinio.config.update({
 const upload = multer({
   storage: multerS3({
     s3: s3ForMinio,
-    bucket: 'images',
+    bucket: process.env.BUCKET_NAME,
     acl: 'public-read',
     metadata(req, file, cb) {
       cb(null, { fieldName: file.fieldname });
@@ -56,7 +56,7 @@ const deleteS3Object = (key) => {
     secretKey: process.env.SECRET_ACCESS_KEY
   });
   const params = {
-    Bucket: 'images',
+    Bucket: process.env.BUCKET_NAME,
     Key: key
   };
   const removeObjectAsync = promisify(minioClient.removeObject.bind(minioClient));
