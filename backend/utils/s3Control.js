@@ -3,16 +3,27 @@ const multerS3 = require('multer-s3');
 const aws = require('aws-sdk');
 const { promisify } = require('util');
 
-aws.config.update({
+let s3config = {
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
   accessKeyId: process.env.ACCESS_KEY_ID,
   region: 'ap-northeast-1'
-});
+};
 
-const s3 = new aws.S3();
+if (process.env.NODE_ENV !== 'production') {
+  s3config = {
+    ...s3config,
+    endpoint: process.env.STORAGE_ENDPOINT,
+    s3ForcePathStyle: true
+  };
+}
+
+const s3 = new aws.S3(s3config);
 const getSignedUrlAsync = promisify(s3.getSignedUrl.bind(s3));
 
 const getS3SignedUrl = async (key, op = 'getObject') => {
+  if (process.env.NODE_ENV !== 'production') {
+    s3.endpoint = 'http://localhost:9000';
+  }
   const params = {
     Bucket: process.env.BUCKET_NAME,
     Key: key
@@ -35,6 +46,9 @@ const upload = multer({
 });
 
 const deleteS3Object = (key) => {
+  if (process.env.NODE_ENV !== 'production') {
+    s3.endpoint = process.env.STORAGE_ENDPOINT;
+  }
   const params = {
     Bucket: process.env.BUCKET_NAME,
     Key: key
