@@ -35,9 +35,6 @@ const imageUpload = async (req, res, next) => {
     next(new createError.UnprocessableEntity('File is not accepted'));
     return;
   }
-  console.log('====================================');
-  console.log(req.file.originalname);
-  console.log('====================================');
   if (!req.file) {
     next(new createError.BadRequest('File not uploaded.'));
     return;
@@ -45,11 +42,15 @@ const imageUpload = async (req, res, next) => {
   let image;
   try {
     image = await Image.upsert({
+      type: req.file.mimetype.split('/')[0],
       key: req.file.key,
       post_id: req.file.originalname
     });
   }
   catch (error) {
+    console.log('====================================');
+    console.log(error);
+    console.log('====================================');
     next(new createError.InternalServerError('DB Error'));
     return;
   }

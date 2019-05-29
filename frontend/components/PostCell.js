@@ -7,6 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
+import ReactPlayer from 'react-player';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = () => ({
@@ -66,7 +67,9 @@ const PostCell = ({
               {post.description}
           </Typography>
           {post.presignedUrl && (
-              <img className={classes.image} src={post.presignedUrl} />
+            post.mediaType === 'video'
+              ? <ReactPlayer width={400} url={post.presignedUrl} playing loop/>
+              : <img className={classes.image} src={post.presignedUrl} />
           )}
         </Collapse>
         <Divider />

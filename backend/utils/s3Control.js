@@ -40,6 +40,9 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key(req, file, cb) {
+      console.log('====================================');
+      console.log(file.mimetype);
+      console.log('====================================');
       const extArray = file.mimetype.split('/');
       const extension = extArray[extArray.length - 1];
       cb(null, `${req.user.id}-${file.originalname}.${extension}`);

@@ -25,7 +25,7 @@ const list = async (req, res, next) => {
       ],
       include: [{
         model: Image,
-        attributes: ['key']
+        attributes: ['key', 'type']
       }]
     });
     newPosts = {};
@@ -40,6 +40,7 @@ const list = async (req, res, next) => {
         user_id: pos.user_id
       };
       if (pos.images.length > 0) {
+        returnedValue.mediaType = pos.images[0].dataValues.type;
         returnedValue.presignedUrl = await getS3SignedUrl(pos.images[0].key);
       }
       return returnedValue;

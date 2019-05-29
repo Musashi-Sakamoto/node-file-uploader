@@ -1,7 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
   const image = sequelize.define('image', {
     key: DataTypes.STRING,
-    post_id: DataTypes.INTEGER
+    post_id: DataTypes.INTEGER,
+    type: DataTypes.STRING
   }, {});
   image.associate = function (models) {
     // associations can be defined here
