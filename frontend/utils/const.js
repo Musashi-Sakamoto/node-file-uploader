@@ -1,4 +1,4 @@
-const BACKEND_URL = 'https://enigmatic-cove-78500.herokuapp.com/api/v1';
+const BACKEND_URL = process.env.API_HOST;
 
 module.exports = {
   BACKEND_URL

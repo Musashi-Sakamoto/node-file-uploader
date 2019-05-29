@@ -6,8 +6,7 @@ const { promisify } = require('util');
 aws.config.update({
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
   accessKeyId: process.env.ACCESS_KEY_ID,
-  region: 'ap-northeast-1',
-  signatureVersion: 'v4'
+  region: 'ap-northeast-1'
 });
 
 const s3 = new aws.S3();
