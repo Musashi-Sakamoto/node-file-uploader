@@ -26,7 +26,6 @@ class MyApp extends App {
     const { Component, pageProps } = this.props;
     return (
       <Container>
-        <SnackbarProvider>
         <StoreProvider>
         <Head>
           <title>My page</title>
@@ -46,11 +45,12 @@ class MyApp extends App {
             <CssBaseline />
             {/* Pass pageContext to the _document though the renderPage enhancer
                 to render collected styles on server-side. */}
+                <SnackbarProvider>
                 <Component pageContext={this.pageContext} {...pageProps} />
+                </SnackbarProvider>
           </MuiThemeProvider>
         </JssProvider>
         </StoreProvider>
-        </SnackbarProvider>
       </Container>
     );
   }
