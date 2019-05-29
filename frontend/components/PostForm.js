@@ -107,7 +107,7 @@ const PostForm = ({
                     Cancel
                 </Button>
                 <input
-                  accept="image/*"
+                  accept="image/*,video/*"
                   className={classes.input}
                   id="text-button-file"
                   multiple
