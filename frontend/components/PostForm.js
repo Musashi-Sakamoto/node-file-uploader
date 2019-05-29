@@ -7,6 +7,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
 import Button from '@material-ui/core/Button';
+import ReactPlayer from 'react-player';
 
 const styles = () => ({
   container: {
@@ -99,7 +100,9 @@ const PostForm = ({
               fullWidth
             />
             {imagePreviewUrl !== '' && (
-              <img className={classes.previewImage} src={imagePreviewUrl} />
+              file.type.split('/')[0] === 'video'
+                ? <ReactPlayer width={400} url={imagePreviewUrl} playing loop/>
+                : <img className={classes.previewImage} src={imagePreviewUrl} />
             )}
             </DialogContent>
             <DialogActions>
