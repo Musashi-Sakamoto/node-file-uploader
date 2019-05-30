@@ -17,28 +17,36 @@ import PostCell from '../components/PostCell';
 
 import { BACKEND_URL } from '../utils/const';
 
-const styles = () => ({
+const styles = theme => ({
   root: {
     position: 'relative'
   },
   list: {
     marginTop: 64,
     width: 400,
-    margin: 'auto'
+    margin: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      width: 320
+    }
   },
   fab: {
     position: 'fixed',
     top: 'auto',
     left: 'auto',
-    right: 400,
-    bottom: 50
+    right: 50,
+    bottom: 50,
+    [theme.breakpoints.down('sm')]: {
+      right: 10,
+      bottom: 10
+    }
   },
   pagerContainer: {
     display: 'block',
     width: 280,
     margin: 'auto',
     paddingLeft: 15,
-    paddingRight: 15
+    paddingRight: 15,
+    textAlign: 'center'
   },
   pager: {
     display: 'inline-block',
@@ -231,7 +239,7 @@ const Index = (props) => {
           ))}
       </List>
 
-      <Fab className={classes.fab} onClick={() => setOpen(true)}>
+      <Fab color='primary' className={classes.fab} onClick={() => setOpen(true)}>
           <AddIcon />
       </Fab>
       {state.count > 20 && (

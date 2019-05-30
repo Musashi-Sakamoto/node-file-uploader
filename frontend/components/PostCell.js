@@ -9,8 +9,9 @@ import Collapse from '@material-ui/core/Collapse';
 import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player';
 import { withStyles } from '@material-ui/core/styles';
+import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
 
-const styles = () => ({
+const styles = theme => ({
   textRoot: {
     width: 240
   },
@@ -30,20 +31,36 @@ const styles = () => ({
   edit: {
     marginLeft: 20,
     height: 40,
-    width: 40
+    width: 40,
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: 5
+    }
   },
   description: {
     width: 400,
     padding: 16,
-    wordBreak: 'break-word'
+    wordBreak: 'break-word',
+    [theme.breakpoints.down('sm')]: {
+      width: 320
+    }
   },
   image: {
-    width: 400
+    width: 400,
+    [theme.breakpoints.down('sm')]: {
+      width: 320
+    }
+  },
+  smallFab: {
+    [theme.breakpoints.down('sm')]: {
+      width: 30,
+      height: 30,
+      minHeight: 30
+    }
   }
 });
 
 const PostCell = ({
-  onDelete, onEdit, post, classes
+  onDelete, onEdit, post, classes, width
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -55,10 +72,14 @@ const PostCell = ({
               primary: classes.primary,
               secondary: classes.secondary
             }} primary={post.title} secondary={post.createdAt}/>
-            <Fab className={classes.delete} size='small' onClick={onDelete(post)}>
+            <Fab classes={{
+              sizeSmall: classes.smallFab
+            }} className={classes.delete} size='small' onClick={onDelete(post)}>
                 <DeleteIcon />
             </Fab>
-            <Fab className={classes.edit} size='small' onClick={onEdit(post)}>
+            <Fab classes={{
+              sizeSmall: classes.smallFab
+            }} className={classes.edit} size='small' onClick={onEdit(post)}>
                 <EditIcon />
             </Fab>
         </ListItem>
@@ -68,7 +89,7 @@ const PostCell = ({
           </Typography>
           {post.presignedUrl && (
             post.mediaType === 'video'
-              ? <ReactPlayer width={400} url={post.presignedUrl} playing loop/>
+              ? <ReactPlayer height='auto' width={isWidthDown('sm', width) ? 320 : 400} url={post.presignedUrl} playing loop/>
               : <img className={classes.image} src={post.presignedUrl} />
           )}
         </Collapse>
@@ -77,4 +98,4 @@ const PostCell = ({
   );
 };
 
-export default withStyles(styles)(PostCell);
+export default withStyles(styles)(withWidth()(PostCell));

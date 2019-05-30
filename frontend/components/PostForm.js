@@ -8,8 +8,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { withSnackbar } from 'notistack';
 import Button from '@material-ui/core/Button';
 import ReactPlayer from 'react-player';
+import withWidth, { isWidthDown, isWidthUp } from '@material-ui/core/withWidth';
 
-const styles = () => ({
+const styles = theme => ({
   container: {
     display: 'flex',
     marginTop: 64,
@@ -28,12 +29,15 @@ const styles = () => ({
     display: 'none'
   },
   previewImage: {
-    maxWidth: 552
+    maxWidth: 552,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    }
   }
 });
 
 const PostForm = ({
-  classes, onSubmit, isOpen, onClose, editedPost, enqueueSnackbar
+  classes, onSubmit, isOpen, onClose, editedPost, enqueueSnackbar, width
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -101,12 +105,12 @@ const PostForm = ({
               label="description"
               type="text"
               multiline={true}
-              rows={5}
+              rows={isWidthDown('sm', width) ? 2 : 5}
               fullWidth
             />
             {(imagePreviewUrl !== '' && type !== '') && (
               type === 'video'
-                ? <ReactPlayer width={400} url={imagePreviewUrl} playing loop/>
+                ? <ReactPlayer height='auto' width={isWidthDown('sm', width) ? '100%' : 400} url={imagePreviewUrl} playing loop/>
                 : <img className={classes.previewImage} src={imagePreviewUrl} />
             )}
             </DialogContent>
@@ -122,7 +126,7 @@ const PostForm = ({
                   type="file" />
                   <label htmlFor="text-button-file">
                     <Button component="span">
-                      Select File
+                      {isWidthUp('sm', width) && 'Select'} File
                     </Button>
                   </label>
                 <Button onClick={onSubmitClicked} color="primary">
@@ -134,4 +138,4 @@ const PostForm = ({
   );
 };
 
-export default withSnackbar(withStyles(styles)(PostForm));
+export default withSnackbar(withStyles(styles)(withWidth()(PostForm)));
