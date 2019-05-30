@@ -39,6 +39,7 @@ const PostForm = ({
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState('');
+  const [type, setType] = useState('');
 
   const onSubmitClicked = () => {
     if (title.trim().length === 0 || description.trim().length === 0) {
@@ -59,6 +60,8 @@ const PostForm = ({
       const selectedFile = e.target.files[0];
       setFile(selectedFile);
       reader.readAsDataURL(selectedFile);
+      const fileType = selectedFile.type.split('/')[0];
+      setType(fileType);
     }
   };
 
@@ -66,7 +69,8 @@ const PostForm = ({
     setTitle(editedPost ? editedPost.title : '');
     setDescription(editedPost ? editedPost.description : '');
     setFile(null);
-    setImagePreviewUrl('');
+    setImagePreviewUrl(editedPost ? editedPost.presignedUrl : '');
+    setType(editedPost ? editedPost.mediaType : '');
   }, [editedPost]);
 
   return (
@@ -100,8 +104,8 @@ const PostForm = ({
               rows={5}
               fullWidth
             />
-            {imagePreviewUrl !== '' && (
-              file.type.split('/')[0] === 'video'
+            {(imagePreviewUrl !== '' && type !== '') && (
+              type === 'video'
                 ? <ReactPlayer width={400} url={imagePreviewUrl} playing loop/>
                 : <img className={classes.previewImage} src={imagePreviewUrl} />
             )}
