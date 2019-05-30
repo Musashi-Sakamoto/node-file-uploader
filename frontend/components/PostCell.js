@@ -89,7 +89,7 @@ const PostCell = ({
           </Typography>
           {post.presignedUrl && (
             post.mediaType === 'video'
-              ? <ReactPlayer volume={0} muted={true} playsinline height='auto' width={isWidthDown('sm', width) ? 320 : 400} url={post.presignedUrl} playing loop/>
+              ? <ReactPlayer volume={0} muted={true} playsinline height='auto' width={isWidthDown('sm', width) ? 320 : 400} url={[{ src: post.presignedUrl, type: 'video/mp4' }]} playing loop/>
               : <img className={classes.image} src={post.presignedUrl} />
           )}
         </Collapse>
