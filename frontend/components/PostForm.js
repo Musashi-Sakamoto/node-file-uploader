@@ -113,7 +113,6 @@ const PostForm = ({
                   accept="image/*,video/*"
                   className={classes.input}
                   id="text-button-file"
-                  multiple
                   onChange={onImagePick}
                   type="file" />
                   <label htmlFor="text-button-file">
