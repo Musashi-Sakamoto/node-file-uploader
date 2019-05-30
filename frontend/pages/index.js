@@ -126,6 +126,7 @@ const Index = (props) => {
 
   const editData = async (title, description, file) => {
     let res;
+    setOpen(false);
     try {
       res = await axios.put(`${BACKEND_URL}/posts/${selectedPost.id}`, { title, description }, {
         headers: {
@@ -148,7 +149,6 @@ const Index = (props) => {
       return;
     }
     props.enqueueSnackbar(`${title} has been updated!`, { variant: 'success' });
-    setOpen(false);
     setSelectedPost(null);
     fetchData();
   };
