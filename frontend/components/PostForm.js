@@ -110,7 +110,7 @@ const PostForm = ({
             />
             {(imagePreviewUrl !== '' && type !== '') && (
               type === 'video'
-                ? <ReactPlayer height='auto' width={isWidthDown('sm', width) ? '100%' : 400} url={imagePreviewUrl} playing loop/>
+                ? <ReactPlayer volume={0} muted={true} playsinline height='auto' width={isWidthDown('sm', width) ? '100%' : 400} url={imagePreviewUrl} playing loop/>
                 : <img className={classes.previewImage} src={imagePreviewUrl} />
             )}
             </DialogContent>
