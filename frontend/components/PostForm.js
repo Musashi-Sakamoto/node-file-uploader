@@ -51,14 +51,15 @@ const PostForm = ({
   };
 
   const onImagePick = (e) => {
-    e.preventDefault();
     const reader = new FileReader();
-    const file = e.target.files[0];
     reader.onloadend = () => {
-      setFile(file);
       setImagePreviewUrl(reader.result);
     };
-    reader.readAsDataURL(file);
+    if (e.target.files.length > 0) {
+      const selectedFile = e.target.files[0];
+      setFile(selectedFile);
+      reader.readAsDataURL(selectedFile);
+    }
   };
 
   useEffect(() => {
@@ -117,7 +118,7 @@ const PostForm = ({
                   type="file" />
                   <label htmlFor="text-button-file">
                     <Button component="span">
-                      Image
+                      Select File
                     </Button>
                   </label>
                 <Button onClick={onSubmitClicked} color="primary">
