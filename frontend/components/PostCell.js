@@ -10,6 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth, { isWidthDown } from '@material-ui/core/withWidth';
+import moment from 'moment-timezone';
+
+moment.tz.guess();
 
 const styles = theme => ({
   textRoot: {
@@ -71,7 +74,7 @@ const PostCell = ({
               root: classes.textRoot,
               primary: classes.primary,
               secondary: classes.secondary
-            }} primary={post.title} secondary={post.createdAt}/>
+            }} primary={post.title} secondary={moment(post.updatedAt).format('YYYY:MM:DD(ddd) HH:mm:ss')}/>
             <Fab classes={{
               sizeSmall: classes.smallFab
             }} className={classes.delete} size='small' onClick={onDelete(post)}>

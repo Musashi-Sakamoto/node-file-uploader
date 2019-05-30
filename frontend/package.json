@@ -19,6 +19,7 @@
     "js-cookie": "^2.2.0",
     "jss": "^9.8.7",
     "lodash": "^4.17.11",
+    "moment-timezone": "^0.5.25",
     "next": "^8.1.0",
     "next-cookies": "^1.1.2",
     "notistack": "^0.8.4",
