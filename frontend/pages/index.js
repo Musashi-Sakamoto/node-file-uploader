@@ -162,6 +162,7 @@ const Index = (props) => {
 
   const deleteData = async () => {
     let res;
+    setDeleteOpen(false);
     try {
       res = await axios.delete(`${BACKEND_URL}/posts/${selectedPost.id}`, {
         headers: {
@@ -174,7 +175,6 @@ const Index = (props) => {
       return;
     }
     props.enqueueSnackbar(`${selectedPost.title} has been deleted!`, { variant: 'success' });
-    setDeleteOpen(false);
     setSelectedPost(null);
     fetchData();
   };
