@@ -85,8 +85,6 @@ const styles = theme => ({
 });
 
 const Index = (props) => {
-  console.log(useContext(Store));
-
   const { state, dispatch } = useContext(Store);
 
   const { token, classes } = props;
