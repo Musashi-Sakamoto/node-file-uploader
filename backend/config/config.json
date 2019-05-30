@@ -18,6 +18,7 @@
     "password": "e7941266",
     "database": "heroku_2df199dfdc5ea4a",
     "host": "us-cdbr-iron-east-02.cleardb.net",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "define": { "charset": "utf8", "dialectOptions": { "collate": "utf8_general_ci" } }
   }
 }
