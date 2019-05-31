@@ -28,6 +28,8 @@ const Navbar = (props) => {
   const [err, setError] = useState('');
 
   const onLogoutClicked = async () => {
+    cookie.remove('token');
+    Router.push('/login');
     try {
       await axios.get(`${BACKEND_URL}/logout`, {
         headers: {
@@ -41,8 +43,6 @@ const Navbar = (props) => {
     }
 
     setError('');
-    cookie.remove('token');
-    Router.push('/login');
   };
 
   return (
