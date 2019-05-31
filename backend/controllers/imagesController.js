@@ -3,7 +3,7 @@ const createError = require('http-errors');
 const _ = require('lodash');
 const Image = require('../models').image;
 
-const { upload } = require('../utils/s3Control');
+const { upload, deleteS3Object } = require('../utils/s3Control');
 
 const singleUpload = util.promisify(upload.single('image'));
 
@@ -27,6 +27,14 @@ const list = async (req, res, next) => {
 const imageUpload = async (req, res, next) => {
   try {
     await singleUpload(req, res);
+    const existingImage = await Image.findOne({
+      where: {
+        post_id: req.file.originalname
+      }
+    });
+    if (existingImage) {
+      await deleteS3Object(existingImage.key);
+    }
   }
   catch (error) {
     console.log('====================================');
