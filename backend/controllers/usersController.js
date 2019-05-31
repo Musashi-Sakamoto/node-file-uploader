@@ -80,7 +80,46 @@ const create = async (req, res, next) => {
   });
 };
 
+const destroy = async (req, res, next) => {
+  const {
+    id
+  } = req.params;
+
+  let existingUser;
+  try {
+    existingUser = await User.findOne({
+      where: {
+        id
+      }
+    });
+  }
+  catch (error) {
+    return next(new createError.InternalServerError('DB Error'));
+  }
+  if (!existingUser) {
+    return next(new createError.BadRequest('User not exits'));
+  }
+
+  try {
+    await User.destroy({
+      where: {
+        id
+      }
+    });
+  }
+  catch (error) {
+    console.log(error);
+
+    return next(new createError.InternalServerError('DB Error'));
+  }
+
+  return res.status(204).json({
+    message: 'Accepted'
+  });
+};
+
 module.exports = {
   create,
-  list
+  list,
+  destroy
 };

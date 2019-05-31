@@ -15,6 +15,7 @@ router.get('/images', passport.authenticate('jwt', { session: false }), imageCon
 
 router.post('/users', userController.create);
 router.get('/users', passport.authenticate('jwt', { session: false }), userController.list);
+router.delete('/users/:id', passport.authenticate('jwt', { session: false }), userController.destroy);
 
 router.post('/posts', passport.authenticate('jwt', { session: false }), postController.create);
 router.get('/posts', passport.authenticate('jwt', { session: false }), postController.list);
