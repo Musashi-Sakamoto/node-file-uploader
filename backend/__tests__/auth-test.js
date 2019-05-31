@@ -15,7 +15,10 @@ const loginUser = async (auth) => {
         password: '1292602b'
       })
       .expect(200);
-    auth.token = res.body.token;
+    if (auth) {
+      auth.token = res.body.token;
+    }
+    return res;
   }
   catch (error) {
     console.log('====================================');
@@ -25,24 +28,88 @@ const loginUser = async (auth) => {
   }
 };
 
-afterAll(async () => {
-  try {
-    const auth = {};
+describe('POST: /api/v1/logout', () => {
+  const auth = {};
+  beforeAll(async () => {
     await loginUser(auth);
-    await request
-      .delete(`/api/v1/users/${createdUser.id}`)
-      .set('Authorization', `Bearer ${auth.token}`)
-      .expect(204);
-  }
-  catch (error) {
-    console.log('====================================');
-    console.log(error);
-    console.log('====================================');
-    throw error;
-  }
+  });
+
+  test('success', async () => {
+    jest.setTimeout(10000);
+
+    try {
+      const res = await request
+        .get('/api/v1/logout')
+        .set('Authorization', `Bearer ${auth.token}`);
+      expect(res.status).toBe(200);
+    }
+    catch (error) {
+      console.log('====================================');
+      console.log(error);
+      console.log('====================================');
+      throw error;
+    }
+  });
+});
+
+describe('POST: /api/v1/login', () => {
+  test('success', async () => {
+    jest.setTimeout(10000);
+
+    try {
+      const res = await loginUser();
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('user');
+      expect(res.body).toHaveProperty('token');
+    }
+    catch (error) {
+      console.log('====================================');
+      console.log(error);
+      console.log('====================================');
+      throw error;
+    }
+  });
+
+  test('failure: no user exists', async () => {
+    jest.setTimeout(10000);
+
+    try {
+      const res = await request
+        .post('/api/v1/login')
+        .send({
+          username: 'musasho-noxists',
+          password: '1292602b'
+        })
+        .set('Accept', 'application/json');
+      expect(res.status).toBe(400);
+    }
+    catch (error) {
+      console.log('====================================');
+      console.log(error);
+      console.log('====================================');
+      throw error;
+    }
+  });
 });
 
 describe('POST: /api/v1/users', () => {
+  afterAll(async () => {
+    try {
+      const auth = {};
+      await loginUser(auth);
+      await request
+        .delete(`/api/v1/users/${createdUser.id}`)
+        .set('Authorization', `Bearer ${auth.token}`)
+        .expect(204);
+    }
+    catch (error) {
+      console.log('====================================');
+      console.log(error);
+      console.log('====================================');
+      throw error;
+    }
+  });
+
   test('success', async () => {
     jest.setTimeout(10000);
     try {
