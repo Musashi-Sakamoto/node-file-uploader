@@ -4,6 +4,9 @@ const Image = require('../models').image;
 const VerificationToken = require('../models').verificationToken;
 const { randomString, hashString } = require('../utils/stringUtil');
 const { sendVerificationEmail } = require('../utils/sendEmail');
+const Sequelize = require('sequelize');
+
+const { Op } = Sequelize;
 /* GET users listing. */
 const list = async (req, res, next) => {
   let users;
@@ -34,7 +37,10 @@ const create = async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: {
-        email
+        [Op.or]: [
+          { email },
+          { name }
+        ]
       }
     });
     if (user !== null) {
@@ -42,6 +48,9 @@ const create = async (req, res, next) => {
     }
   }
   catch (error) {
+    console.log('====================================');
+    console.log(error);
+    console.log('====================================');
     return next(new createError.InternalServerError('DB Error [users create 1]'));
   }
 
