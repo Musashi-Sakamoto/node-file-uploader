@@ -33,4 +33,12 @@ describe('サインアップ画面に遷移', () => {
         cy.contains('Signup').click();
         cy.contains('User already exists.')
     })
+
+    it('サインアップ成功', () => {
+        cy.get(`input[name='email']`).clear().type('1292602g@gmail.com')
+        cy.get(`input[name='username']`).clear().type('musalo')
+        cy.get(`input[name='password']`).clear().type('1292602b')
+        cy.contains('Signup').click();
+        cy.contains('Please confirm yourself in the mail')
+    })
 })
