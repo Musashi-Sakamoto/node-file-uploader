@@ -44,6 +44,6 @@ describe('form', () => {
     const onSubmit = jest.fn();
     const wrapper = mount(<SnackbarProvider><Form isLogin onSubmit={onSubmit} /></SnackbarProvider>);
     wrapper.find('button').simulate('click');
-    expect(onSubmit).toHaveBeenCalledTimes(0);
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 });
