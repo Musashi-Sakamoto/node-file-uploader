@@ -1,7 +1,7 @@
-
+import { hashString } from '../utils/stringUtil';
 
 module.exports = {
-  up: (queryInterface, Sequelize) =>
+  up: async (queryInterface, Sequelize) => {
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
@@ -12,13 +12,16 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
-    queryInterface.bulkInsert('users', [{
+    const password = await hashString('password');
+    await queryInterface.bulkInsert('users', [{
       name: 'Musashi',
-      email: 'emailemail@email.com',
-      password: '$2y$12$rZgc7vLXbuvijuRlvb1xqutSIuFG6MW7cbe2hZpcDaeCM0xMj6sMq',
+      email: '1292602b@gmail.com',
+      password,
+      isVerified: true,
       createdAt: '9999-12-31 23:59:59',
       updatedAt: '9999-12-31 23:59:59'
-    }], {}),
+    }], {});
+  },
 
 
   down: (queryInterface, Sequelize) => queryInterface.bulkDelete('users', null, {})

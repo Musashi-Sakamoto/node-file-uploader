@@ -8,6 +8,9 @@
     "start": "pm2-runtime start ecosystem.config.js --env production && pm2 logs all",
     "lint": "eslint --fix .",
     "migrate": "npx sequelize db:migrate",
+    "seed": "npx sequelize db:seed:all",
+    "db:drop": "npx sequelize db:drop",
+    "db:create": "npx sequelize db:create",
     "test": "jest --forceExit --runInBand"
   },
   "dependencies": {
