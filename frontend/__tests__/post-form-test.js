@@ -24,6 +24,11 @@ describe('post form', () => {
       description: 'description'
     };
     const wrapper = mount(<SnackbarProvider><PostForm editedPost={mockPost} isOpen /></SnackbarProvider>);
+    wrapper.update();
+    expect(wrapper.find('Dialog').find('TextField').first().find('input')
+      .props().value).toBe(mockPost.title);
+    expect(wrapper.find('Dialog').find('TextField').at(1).find('textarea')
+      .props().value).toBe(mockPost.description);
     expect(wrapper.find('Dialog').find('Button').at(2).text()).toBe('Edit');
   });
 
@@ -63,20 +68,39 @@ describe('post form', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  // it('プレビュー画像表示', () => {
-  //   const onSubmit = jest.fn();
-  //   const wrapper = mount(<SnackbarProvider><Form isLogin onSubmit={onSubmit} /></SnackbarProvider>);
-  //   wrapper.find(TextField).first().find('input').simulate('change', {
-  //     target: {
-  //       value: 'username'
-  //     }
-  //   });
-  //   wrapper.find(TextField).at(1).find('input').simulate('change', {
-  //     target: {
-  //       value: 'password'
-  //     }
-  //   });
-  //   wrapper.find('button').simulate('click');
-  //   expect(onSubmit).toHaveBeenCalled();
-  // });
+  it('編集時のプレビュー動画表示', () => {
+    const mockPost = {
+      id: 1,
+      title: 'title',
+      description: 'description',
+      presignedUrl: `${__dirname}/assets/test.mp4`,
+      mediaType: 'video'
+    };
+    const wrapper = mount(<SnackbarProvider><PostForm editedPost={mockPost} isOpen /></SnackbarProvider>);
+    wrapper.update();
+    expect(wrapper.find('Dialog').find('TextField').first().find('input')
+      .props().value).toBe(mockPost.title);
+    expect(wrapper.find('Dialog').find('TextField').at(1).find('textarea')
+      .props().value).toBe(mockPost.description);
+    expect(wrapper.find('ReactPlayer')).toBeTruthy();
+    expect(wrapper.find('Dialog').find('Button').at(2).text()).toBe('Edit');
+  });
+
+  it('編集時のプレビュー画像表示', () => {
+    const mockPost = {
+      id: 1,
+      title: 'title',
+      description: 'description',
+      presignedUrl: `${__dirname}/assets/test.jpeg`,
+      mediaType: 'image'
+    };
+    const wrapper = mount(<SnackbarProvider><PostForm editedPost={mockPost} isOpen /></SnackbarProvider>);
+    wrapper.update();
+    expect(wrapper.find('Dialog').find('TextField').first().find('input')
+      .props().value).toBe(mockPost.title);
+    expect(wrapper.find('Dialog').find('TextField').at(1).find('textarea')
+      .props().value).toBe(mockPost.description);
+    expect(wrapper.find('img')).toBeTruthy();
+    expect(wrapper.find('Dialog').find('Button').at(2).text()).toBe('Edit');
+  });
 });
