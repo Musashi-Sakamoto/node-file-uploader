@@ -54,8 +54,9 @@ const login = async (req, res, next) => {
 const logout = async (req, res, next) => {
   try {
     await redis.del(req.user.id);
-  } catch (error) {
-    console.log(error)
+  }
+  catch (error) {
+    console.log(error);
   }
   req.logout();
   return res.status(200).json({

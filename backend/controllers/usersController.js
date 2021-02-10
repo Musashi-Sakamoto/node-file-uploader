@@ -80,6 +80,9 @@ const create = async (req, res, next) => {
     console.log('====================================');
     console.log(error);
     console.log('====================================');
+    if (error.response) {
+      console.error(error.response.body);
+    }
     return next(new createError.InternalServerError('DB Error [users create 3]'));
   }
 
