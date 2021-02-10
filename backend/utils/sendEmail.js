@@ -11,7 +11,7 @@ const sendVerificationEmail = (to, token) => {
     from: process.env.FROM_EMAIL, // Use the email address or domain you verified above
     subject: 'Verify Your Email',
     text: `Click on this link to verify your email ${HOST_URL}/verification?token=${token}&email=${to}`,
-    html: '<strong>and easy to do anywhere, even with Node.js</strong>'
+    html: `<a href="${HOST_URL}/verification?token=${token}&email=${to}">Click here to verify your email</a>`
   };
   return sgMail.send(msg);
 };
